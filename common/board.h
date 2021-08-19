@@ -29,52 +29,51 @@ board* board_new();
 
 /**************** board_insert ****************/
 /* inserts a value into a specifc cell of the board
- * 
+ *
  * 
  */
 void board_insert(board* board, int row, int column, int value);
 
 /**************** board_print ****************/
-/*
- * 
+/* prints out a given board
  * 
  *        
  */
 void board_print(board* board);
 
 /**************** board_scan ****************/
-/*
- *
+/* scans a board from stdin
+ * returns: a pointer to a scanned-in board
  * 
  */
 board* board_scan(FILE* fp);
 
 
 /**************** board_get ****************/
-/*
- * 
+/* returns: a value at the cell indicated by
+ * row and column value
  * 
  */
-void board_get(board* board, int row, int column);
+int board_get(board* board, int row, int column);
 
 /**************** board_editable_spots ****************/
-/*
- * 
+/* returns: an array of coordinates that are editable
+ * or marked as "zero"
  * 
  */
 char* board_editable_spots(board* board);
 
 /**************** is_valid ****************/
-/*
- * 
+/* returns: false if the board breaks any rules,
+ * true if the board is valid
  * 
  */
 bool is_valid(board* board);
 
 
 /**************** is_complete ****************/
-/*
- * 
+/* returns: true if board has all spots filled in,
+ * false if still empty spots left
  * 
  */
 bool is_complete(board* board);
