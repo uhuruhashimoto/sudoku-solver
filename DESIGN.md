@@ -38,34 +38,23 @@ Output for `sudoku solve`: The solution for a given, unfinished puzzle.
 We anticipate the following modules and functions: 
 
 sudoku, the driver program that calls both create and solve 
-
-	    main
-
-	    validate_arguments 
+	* main
+	* validate_arguments 
 
 create, the module for creating a puzzle with a unique solution
 
 solve, the module for solving a puzzle inputted through stdin
 
 common, the directory (can be compiled to a library) of common functionality needed for both create and solve 
-
-	    board.c, providing an API to interact with a board struct  
-
-	    board struct: a wrapper (typedef) for a 9x9 array of ints 
-
-	    isvalid 
-
-		iscomplete 
-
-		insert
-
-		delete
-
-		print
-
-		scan 
-
-		get
+	* board.c, providing an API to interact with a board struct  
+	* board struct: a wrapper (typedef) for a 9x9 array of ints 
+	* isvalid 
+	* iscomplete 
+	* insert
+	* delete
+	* print
+	* scan 
+	* get
 
 utilities.c, providing functions that are needed in the puzzle creation and solving process
 	backtrack
