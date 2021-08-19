@@ -19,6 +19,10 @@
 /**************** global types ****************/
 typedef int board[9][9];
 
+struct editable_spots {
+  int **coords;
+  int num_spots; 
+} editable_spots_t;
 
 /**************** board_new ****************/
 /* creates a new, empty board
@@ -61,7 +65,7 @@ int board_get(board* board, int row, int column);
  * or marked as "zero"
  * 
  */
-char* board_editable_spots(board* board);
+editable_spots_t* board_editable_spots(board* board);
 
 /**************** is_valid ****************/
 /* returns: false if the board breaks any rules,
@@ -78,12 +82,5 @@ bool is_valid(board* board);
  */
 bool is_complete(board* board);
 
-
-/**************** board_delete ****************/
-/* Deletes the board
- * 
- * 
- */
-void board_delete(board* board);
 
 #endif // __BOARD_H
