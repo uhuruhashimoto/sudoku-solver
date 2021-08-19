@@ -78,7 +78,8 @@ Returns: bool
 				- if hit max solutions, return true
 			- do backtrace(board, array, max, # solutions ++)
 				- returns true? return true;
-				- returns false? return false and remove i from board;
+				- returns false? return false
+	- remove i from board;
 	- return false //this catches an unsolveable board
 
 
