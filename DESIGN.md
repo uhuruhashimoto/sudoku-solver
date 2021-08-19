@@ -69,13 +69,13 @@ We anticipate the following modules and functions:
 	* get
 
 
-utilities.c, providing functions that are needed in the puzzle creation and solving process
+* utilities.c, providing functions that are needed in the puzzle creation and solving process
 
--backtrack
+	* backtrack
 
--filldiagonals
+	* filldiagonals
 
--removerandom
+	* removerandom
 
 # Pseudocode
 *Note: we chose a brute-force approach to solving, using the backtracking method outlined in https://en.wikipedia.org/wiki/Sudoku_solving_algorithms 
