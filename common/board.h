@@ -19,11 +19,7 @@
 /**************** global types ****************/
 typedef int board[9][9];
 
-struct editable_spots {
-  int **coords;
-  int num_spots; 
-} editable_spots_t;
-
+typedef struct editable_spots_t;
 /**************** board_new ****************/
 /* creates a new, empty board
  * returns: a pointer to the new board
