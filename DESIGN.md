@@ -46,8 +46,8 @@ create, the module for creating a puzzle with a unique solution
 solve, the module for solving a puzzle inputted through stdin
 
 common, the directory (can be compiled to a library) of common functionality needed for both create and solve 
-	-board.c, providing an API to interact with a board struct  
-	-board struct: a wrapper (typedef) for a 9x9 array of ints 
+	>board.c, providing an API to interact with a board struct 
+	>board struct: a wrapper (typedef) for a 9x9 array of ints 
 	-isvalid 
 	-iscomplete 
 	-insert
