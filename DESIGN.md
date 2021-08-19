@@ -38,23 +38,34 @@ Output for `sudoku solve`: The solution for a given, unfinished puzzle.
 We anticipate the following modules and functions: 
 
 sudoku, the driver program that calls both create and solve 
-    main
-    validate_arguments 
+
+	    main
+
+	    validate_arguments 
 
 create, the module for creating a puzzle with a unique solution
 
 solve, the module for solving a puzzle inputted through stdin
 
 common, the directory (can be compiled to a library) of common functionality needed for both create and solve 
-    board.c, providing an API to interact with a board struct  
-    board struct: a wrapper (typedef) for a 9x9 array of ints 
-    isvalid 
-	iscomplete 
-	insert
-	delete
-	print
-	scan 
-	get
+
+	    board.c, providing an API to interact with a board struct  
+
+	    board struct: a wrapper (typedef) for a 9x9 array of ints 
+
+	    isvalid 
+
+		iscomplete 
+
+		insert
+
+		delete
+
+		print
+
+		scan 
+
+		get
 
 utilities.c, providing functions that are needed in the puzzle creation and solving process
 	backtrack
@@ -79,8 +90,7 @@ Returns: bool
 			- do backtrace(board, array, max, # solutions ++)
 				- returns true? return true;
 				- returns false? return false
-	- remove i from board;
-	- return false //this catches an unsolveable board
+	- remove i from the current spot and return false 
 
 
 
@@ -88,12 +98,17 @@ Returns: bool
 Inputs: none
 Returns: board with >=40 empty spots and one unique solution
 
-	- Fill diagonal quadrants
-		- Scramble a 1x9 array, and insert it into corner, middle, and corner of board
+	- Fill diagonal blocks
+		- Scramble a 1x9 array, and insert it into the 3x3 arrays at the top left corner, middle, and bottom right corner of board
 	- Solve board
 		- call solve() on board to return a fully solved board
-	- Remove numbers from solved board
+	- While we’ve removed fewer than 40 numbers: 
+	- Remove numbers from solved board at random 
+	            - Call backtrack to see if there is a unique solution to the puzzle now that another number has been removed
+	            - If so, continue to remove numbers, if not, put back the number we just removed and try a different random square to remove 
+	            - If none of the squares removed give a unique solution, backtrack and put back the previous square as well 
 		- this is basically backtrack (same recursive structure)
+
 
 
 
