@@ -15,8 +15,8 @@
 #include "solve.h"
 #include "create.h"
 
-const int ERROR_NUM_ARGS;
-const int ERROR_ARG;
+const int ERROR_NUM_ARGS = 1;
+const int ERROR_ARG = 2;
 
 
 int validate_arguments(const int argc, const char *argv[]);
