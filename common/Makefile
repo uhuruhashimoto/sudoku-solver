@@ -7,7 +7,7 @@
 OBJS = board.o utilities.o file.o
 LIB = common.a
 
-FLAGS = #-DUNITTEST # -DMEMTEST  # -DDEBUG 
+FLAGS = -DUNIT_TEST # -DMEMTEST  # -DDEBUG 
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS)
 CC = gcc
@@ -17,11 +17,12 @@ $(LIB): $(OBJS)
 	ar cr $(LIB) $(OBJS)
 
 # unit test target for board
-unit_board: board.o 
-	$(CC) $(CFLAGS) -DUNITTEST $^ -o unit_board
+unit_board: board.o unittest.h file.o
+	$(CC) $(CFLAGS) $^ -o unit_board
 
 unit_utilities: utilities.o 
-	$(CC) $(CFLAGS) -DUNITTEST $^ -o unit_utilities
+	$(CC) $(CFLAGS) -DUNIT_TEST $^ -o unit_utilities
+
 
 # Dependencies: object files depend on header files
 board.o: board.h 
