@@ -7,11 +7,11 @@
 The **sudoku creator** will create a random 9x9 Sudoku puzzle with a unique solution. The **sudoku solver** will generate a solution to a given puzzle. 
 
 # Data flow:
-The ./sudoku executable is our entry point to the whole program. It takes exactly one argument, either “create” or “solve”, and initializes the appropriate module depending on what the user wants to do. For the most part, the only data that really needs to be passed around from module to module is the board struct that keeps track of the state of the puzzle, whether solving or creating. 
+The ./sudoku executable is our entry point to the whole program. It takes exactly one argument, either “create” or “solve”, and initializes the appropriate module depending on what the user wants to do. For the most part, the only data that really needs to be passed around from module to module is the board that keeps track of the state of the puzzle, whether solving or creating. This board is a 9x9 array of integers, intialized in our main() driver, and persists while our driver runs. 
 
-For solve: the puzzle to be solved is read from stdin, one line at a time. The puzzle is parsed into a board struct, to which a pointer is then passed to backtrack (and the functions in board.c that backtrack uses) to solve the puzzle. Then, the solve module formats the board (if solvable) to be printed to stdout, or it prints an error message. Note that for solve, we also keep track of a list of “editable” squares (spots that are inputted as 0 when reading the puzzle), to be passed to backtrack as well. 
+For solve: the puzzle to be solved is read from stdin, one line at a time. The puzzle is parsed into our (statically allocated) array, to which a pointer is then passed to backtrack (and the functions in board.c that backtrack uses) to solve the puzzle. Then, the solve module formats the board (if solvable) to be printed to stdout, or it prints an error message. Note that for solve, we also keep track of a list of “editable” squares (spots that are inputted as 0 when reading the puzzle), to be passed to backtrack as well. 
 
-For create: the puzzle is created as a board struct first. It is initialized to empty, then the diagonals are filled in. Then the board is passed to solve, and then random numbers are deleted from the completed board until a puzzle with a unique solution is found. The method to check for a unique solution leverages backtrack. Backtrack, and all other helper functions in the creation process, take a pointer to the board struct as one of their parameters. Finally, the create module prints the puzzle to stdout. 
+For create: the puzzle is created as a board first. It is initialized to contain zeros, and then the diagonals are filled in. Then the board is passed to solve, and then random numbers are deleted from the completed board until a puzzle with a unique solution is found. The method to check for a unique solution leverages backtrack. Backtrack, and all other helper functions in the creation process, take a pointer to the board struct as one of their parameters. Finally, the create module prints the puzzle to stdout. 
 
 # User interface: 
 The sudoku’s interface with the user is on the command line; it must always have two arguments. The user can call:
@@ -41,6 +41,8 @@ We anticipate the following modules and functions:
 
 	* main
 
+		* contains board struct: a wrapper (typedef) for a 9x9 array of ints 
+
 	* validate_arguments 
 
 
@@ -50,17 +52,13 @@ We anticipate the following modules and functions:
 
 * common, the directory (can be compiled to a library) of common functionality needed for both create and solve 
 
-	* board.c, providing an API to interact with a board struct 
-
-	* board struct: a wrapper (typedef) for a 9x9 array of ints 
+	* board.c, providing an API to interact with a board struct (initialized in driver)
 
 	* isvalid 
 
 	* iscomplete 
 
 	* insert
-
-	* delete
 
 	* print
 
