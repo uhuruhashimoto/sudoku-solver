@@ -20,11 +20,13 @@
 typedef int board[9][9];
 
 
-
 /********** Function Prototypes ************/
+static bool is_in(int num, int array[9]);
+static bool unique_and_valid(int value, int numbers[9], int *index);
 
 /**************** board_new ****************/
-board* board_new() {
+board* board_new() 
+{
     board *new = malloc(sizeof(int[9][9]));
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
@@ -36,13 +38,15 @@ board* board_new() {
 
 
 /**************** board_insert ****************/
-void board_insert(board board, int row, int column, int value){
+void board_insert(board board, int row, int column, int value)
+{
     board[row][column] = value;
 }
 
 
 /**************** board_print ****************/
-void board_print(board board){
+void board_print(board board)
+{
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
             fprintf(stdout, "%d ", board[i][j]);
@@ -52,16 +56,18 @@ void board_print(board board){
 }
 
 /**************** board_get ****************/
-int board_get(board board, int row, int column){
+int board_get(board board, int row, int column)
+{
     return board[row][column];
 }
 
 // /**************** board_scan ****************/
-void board_scan(board board, FILE* fp){
-    int i=0;
+void board_scan(board board, FILE* fp)
+{
+    int i = 0;
     char* row;
 
-    while((row = freadlinep(fp))!=NULL && i < 9){
+    while((row = freadlinep(fp)) != NULL && i < 8){
 
         if(strlen(row) != 18){
             free(row);
@@ -70,11 +76,10 @@ void board_scan(board board, FILE* fp){
         }
 
         else{
-
             char *value = strtok(row, " ");
 
             int j = 0;
-            while(value!=NULL && j < 9){
+            while(value != NULL && j < 9){
                 int val;
                 sscanf(value, "%d", &val);
                 board[i][j] = val;
@@ -85,18 +90,18 @@ void board_scan(board board, FILE* fp){
             }
             i++;
             free(row);
-
         }
     }
 }
 
 /**************** board_editable_spots ****************/
-editable_spots_t board_editable_spots(board board){
-    int length=0;
+editable_spots_t board_editable_spots(board board)
+{
+    int length = 0;
 
-    for(int i=0; i<9; i++){
-        for(int j=0; j<9; j++){
-            if(board[i][j]==0){
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            if(board[i][j] == 0){
                 length++;
             }
         }
@@ -105,14 +110,12 @@ editable_spots_t board_editable_spots(board board){
     editable_spots_t editable_spots;
 
     editable_spots.coords = calloc(sizeof(int[2]), length);
-
     editable_spots.num_spots = length;
 
-    int index=0;
-    for(int i=0; i<9; i++){
-        for(int j=0; j<9; j++){
-            if(board[i][j]==0){
-                
+    int index = 0;
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            if(board[i][j] == 0){
                 editable_spots.coords[index][0] = i;
                 editable_spots.coords[index][1] = j;
                 index++; 
@@ -120,6 +123,82 @@ editable_spots_t board_editable_spots(board board){
         }
     }
     return editable_spots;
+}
+
+bool is_valid(board board) 
+{
+    // check rows 
+    for (int row = 0; row < 9; row++) {
+        int numbers[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int index = 0;
+        for (int col = 0; col < 9; col++) {
+            if (!unique_and_valid(board[row][col], numbers, &index)) {
+                return false;
+            }
+        }
+    }
+
+    // check cols 
+    for (int col = 0; col < 9; col++) {
+        int numbers[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int index = 0;
+        for (int row = 0; row < 9; row++) {
+            if (!unique_and_valid(board[row][col], numbers, &index)) {
+                return false;
+            }
+        }
+    }
+
+    // check blocks 
+    for (int block = 0; block < 9; block++) {
+        int row = block / 3;
+        int col = (block % 3) * 3;
+        
+
+        int numbers[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int index = 0;
+        for (int i = row; i < row + 3; i++) {
+            for (int j = col; j < col + 3; j++) {
+                if (!unique_and_valid(board[i][j], numbers, &index)) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+
+}
+
+// returns true if value is not in numbers array and adds value to numbers
+// otherwise, returns false and does not add to the array
+static bool unique_and_valid(int value, int numbers[9], int *index)
+{
+    if (value > 9 || value < 0) {
+        return false;
+    }
+    else if (value == 0) {
+        return true; // empty cell is always valid 
+    }
+    else if (is_in(value, numbers)) {
+        return false;
+    }
+    else {
+        numbers[*index] = value;
+        (*index)++;
+    }
+    return true;
+}
+
+// helper for is_valid
+static bool is_in(int num, int array[9])
+{
+    for (int i = 0; i < 9; i++) {
+        if (array[i] == num) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -135,8 +214,10 @@ int test_print_board(board board);
 int test_scan_board(board board);
 int test_editable_spots(board board);
 int test_board_get(board board);
+int test_board_valid(board board, char *filepath);
 
 
+// comment and uncomment tests as needed
 int main(){
     board new;
 
@@ -148,9 +229,10 @@ int main(){
     int failures = 0;
     // failures += test_new_board(new);
     // failures += test_print_board(new);
-    // failures += test_scan_board(new);
+    failures += test_scan_board(new);
     // failures += test_editable_spots(new);
-    failures += test_board_get(new);
+    // failures += test_board_get(new);
+    failures += test_board_valid(new, "test_board.txt");
     printf("FAIL %d test cases\n", failures);
     return failures;
 
@@ -211,6 +293,26 @@ int test_board_get(board board) {
     printf("%d\n", board_get(board, 6, 0));
     
     END_TEST_CASE;
+    return 0;
+}
+
+// TODO: unit test with fixed boards (from file) instead of having 
+// to read from stdin 
+int test_board_valid(board board, char *filepath) {
+    START_TEST_CASE("boardvalid");
+    
+    FILE *fp = fopen(filepath, "r");
+    if (fp == NULL) {
+        return 1;
+    }
+    board_scan(board, fp);
+    printf("input board for is_valid:\n");
+    board_print(board);
+
+    printf(is_valid(board) ? "is valid\n" : "is invalid\n");
+    fclose(fp);
+    END_TEST_CASE;
+    
     return 0;
 }
 

@@ -71,7 +71,7 @@ editable_spots_t board_editable_spots(board board);
  * true if the board is valid
  * 
  */
-bool is_valid(board* board);
+bool is_valid(board board);
 
 
 /**************** is_complete ****************/
@@ -79,14 +79,15 @@ bool is_valid(board* board);
  * false if still empty spots left
  * 
  */
-bool is_complete(board* board);
+bool is_complete(board board);
 
 
-/**************** board_delete ****************/
+/**************** editable_spots_delete ****************/
 /* returns: void 
+ * frees space used to store array of coordinates
  * 
  */
-void board_delete(board *to_delete); 
+void editable_spots_delete(editable_spots_t editable_spots); 
 
 
 #endif // __BOARD_H
