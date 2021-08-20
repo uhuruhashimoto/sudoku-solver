@@ -4,10 +4,10 @@
 # CS50, Summer 2021
 
 # object files, and the target library
-OBJS = board.o utilities.o file.o unittest.o
+OBJS = board.o utilities.o file.o
 LIB = common.a
 
-FLAGS = #-DUNITTEST # -DMEMTEST  # -DDEBUG 
+FLAGS = -DUNIT_TEST # -DMEMTEST  # -DDEBUG 
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS)
 CC = gcc
@@ -21,7 +21,7 @@ board.o: board.h
 utilities.o: utilities.h 
 file.o: file.h
 
-.PHONY: clean unit_board unit_utilities
+.PHONY: clean
 
 # clean up after our compilation
 clean:
@@ -30,10 +30,10 @@ clean:
 	rm -f unit_*
 
 # unit test target for board
-unit_board: board.o unittest.h
+unit_board: board.o
 	$(CC) $(CFLAGS) -DUNIT_TEST $^ -o unit_board
 
 unit_utilities: utilities.o unittest.h
-	$(CC) $(CFLAGS) -DUNIT_TEST utilities.c $^ -o unit_utilities
+	$(CC) $(CFLAGS) $^ -o unit_utilities
 
 unit:	unit_utilities
