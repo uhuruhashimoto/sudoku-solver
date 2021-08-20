@@ -53,7 +53,7 @@ void board_print(board board){
 
 /**************** board_get ****************/
 int board_get(board board, int row, int column){
-
+    return board[row][column];
 }
 
 // /**************** board_scan ****************/
@@ -62,12 +62,6 @@ void board_scan(board board, FILE* fp){
     char* row;
 
     while((row = freadlinep(fp))!=NULL && i < 9){
-
-
-        // if(sscanf("%d %d %d %d %d %d %d %d %d\n", &row[0], &row[1], &row[2], &row[3], &row[4], &row[5], &row[6], &row[7], &row[8]) != 9){
-        // printf("sudoku board must have 9x9 dimensions, please re-enter a valid board.");
-        // return 1;
-        // }
 
         if(strlen(row) != 18){
             free(row);
@@ -140,6 +134,7 @@ int test_new_board(board board);
 int test_print_board(board board);
 int test_scan_board(board board);
 int test_editable_spots(board board);
+int test_board_get(board board);
 
 
 int main(){
@@ -151,10 +146,11 @@ int main(){
         }
     }
     int failures = 0;
-    failures += test_new_board(new);
-    failures += test_print_board(new);
-    failures += test_scan_board(new);
-    failures += test_editable_spots(new);
+    // failures += test_new_board(new);
+    // failures += test_print_board(new);
+    // failures += test_scan_board(new);
+    // failures += test_editable_spots(new);
+    failures += test_board_get(new);
     printf("FAIL %d test cases\n", failures);
     return failures;
 
@@ -202,6 +198,17 @@ int test_editable_spots(board board)
         printf("%d, %d ", editable_spots.coords[i][0], editable_spots.coords[i][1]);
         
     }
+    
+    END_TEST_CASE;
+    return 0;
+}
+
+int test_board_get(board board) {
+    START_TEST_CASE("boardget");
+    printf("input board for board_get:\n");
+    board_scan(board, stdin);
+
+    printf("%d\n", board_get(board, 6, 0));
     
     END_TEST_CASE;
     return 0;
