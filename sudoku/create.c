@@ -12,16 +12,21 @@ void create() {
     //declare board
     
     //Fill diagonals (3)
-    //solve board
+    //solve board to fill other squares
+    //remove numbers from board
+
+    //print board and message
+
+}
+
+//recursive loop: removes numbers while maintaining solveable board until the board has >40 empty spots
+bool remove_numbers(board *board, int num_removed) {
     //loop: while removed < 40
         // remove random number
         // call backtrack to see if puzzle has unique solution
-        // if so, continue to remove numbers
+        // if so, call remove_numbers(board)
         // if not, put back the number we removed and try a different square
         // If none of the squares removed give a unique solution, backtrack and put back the previous square as well 
-
-    //print board
-
 }
 
 void fill_diagonals(board *board) {
