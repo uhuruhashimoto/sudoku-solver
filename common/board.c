@@ -32,7 +32,7 @@ typedef struct editable_spots {
 board* board_new() {
     board *new = malloc(sizeof(int[9][9]));
     for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 0; j++) {
+        for (int j = 0; j < 9; j++) {
             *new[i][j] = 0;
         }
     }
@@ -41,16 +41,16 @@ board* board_new() {
 
 
 /**************** board_insert ****************/
-void board_insert(board* board, int row, int column, int value){
-    *board[row][column] = value;
+void board_insert(board board, int row, int column, int value){
+    board[row][column] = value;
 }
 
 
 /**************** board_print ****************/
-void board_print(board* board){
+void board_print(board board){
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
-            fprintf(stdout, "%d ", *board[i][j]);
+            fprintf(stdout, "%d ", board[i][j]);
         }
         fprintf(stdout, "\n");
     }
@@ -58,17 +58,13 @@ void board_print(board* board){
 
 
 // /**************** board_scan ****************/
-board* board_scan(FILE* fp){
+void board_scan(board board, FILE* fp){
     int i=0;
-    board *new = board_new();
     char* row;
-    printf("NEW BOARD\n");
-    board_print(new);
+    board_print(board);
 
     while((row = freadlinep(fp))!=NULL && i < 9){
-        printf("NEW NEW BOARD\n");
-        board_print(new);
-        printf("i: %d\n", i);
+
 
         // if(sscanf("%d %d %d %d %d %d %d %d %d\n", &row[0], &row[1], &row[2], &row[3], &row[4], &row[5], &row[6], &row[7], &row[8]) != 9){
         // printf("sudoku board must have 9x9 dimensions, please re-enter a valid board.");
@@ -78,86 +74,89 @@ board* board_scan(FILE* fp){
         if(strlen(row) != 18){
             free(row);
             fprintf(stderr, "not a valid board");
-            return NULL;
+            return;
         }
 
         else{
 
-            char *value = strtok(row, " \t");
+            char *value = strtok(row, " ");
 
             int j = 0;
             while(value!=NULL && j < 9){
                 int val;
                 sscanf(value, "%d", &val);
-                *new[i][j] = val;
-                printf("made (%d, %d) equal to %d\n", i, j, val);
+                board[i][j] = val;
+
                 j++;
 
-                board_print(new);
+                board_print(board);
 
-                value = strtok(NULL, " \t");
+                value = strtok(NULL, " ");
             }
             i++;
-            // free(row);
+            free(row);
 
         }
     }
-    return new;
 }
 
-void board_delete(board *to_delete) 
-{
-    free(to_delete);
-}
+// void board_delete(board *to_delete) 
+// {
+//     free(to_delete);
+// }
 
 #ifdef UNIT_TEST
 #include <stdio.h>
 #include "unittest.h"
 
-int test_new_board();
-int test_print_board();
-int test_scan_board();
+int test_new_board(board board);
+int test_print_board(board board);
+int test_scan_board(board board);
 
 int main(){
+    board new;
+
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            new[i][j] = 0;
+        }
+    }
     int failures = 0;
-    failures += test_new_board();
-    failures += test_print_board();
-    failures += test_scan_board();
+    failures += test_new_board(new);
+    failures += test_print_board(new);
+    failures += test_scan_board(new);
     printf("FAIL %d test cases\n", failures);
     return failures;
 
 }
 
-int test_new_board()
+int test_new_board(board board)
 {
-    START_TEST_CASE("newboard");
-    board* new = board_new();
+    // START_TEST_CASE("newboard");
+    // board* new = board_new();
 
-    EXPECT(new != NULL);
+    // EXPECT(new != NULL);
 
-    END_TEST_CASE;
-    return TEST_RESULT;
+    // END_TEST_CASE;
+    return 0;
 }
 
-int test_print_board()
+int test_print_board(board board)
 {
     START_TEST_CASE("printboard");
-    board* new = board_new();
 
-    board_print(new);
+    board_print(board);
 
     END_TEST_CASE;
     return 0;
 }
 
-int test_scan_board()
+int test_scan_board(board board)
 {
     START_TEST_CASE("scanboard");
-    board* new = board_scan(stdin);
+    board_scan(board, stdin);
 
-    EXPECT(new!=NULL);
-
-    board_print(new);
+    board_print(board);
     END_TEST_CASE;
     return 0;
 }

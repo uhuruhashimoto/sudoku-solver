@@ -32,21 +32,21 @@ board* board_new();
  *
  * 
  */
-void board_insert(board* board, int row, int column, int value);
+void board_insert(board board, int row, int column, int value);
 
 /**************** board_print ****************/
 /* prints out a given board
  * 
  *        
  */
-void board_print(board* board);
+void board_print(board board);
 
 /**************** board_scan ****************/
 /* scans a board from stdin
  * returns: a pointer to a scanned-in board
  * 
  */
-board* board_scan(FILE* fp);
+void board_scan(board board, FILE* fp);
 
 
 /**************** board_get ****************/
@@ -54,7 +54,7 @@ board* board_scan(FILE* fp);
  * row and column value
  * 
  */
-int board_get(board* board, int row, int column);
+int board_get(board board, int row, int column);
 
 /**************** board_editable_spots ****************/
 /* returns: an array of coordinates that are editable
