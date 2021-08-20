@@ -9,18 +9,55 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "utilities.h"
+#include "board.h"
 
-typedef int board[9][9];
-
-static inline void shuffle_arr(int (*arr)[], int n)
+static inline void shuffle_arr(int arr[], int n)
 {
+  srand ( time(NULL) );
   int i, j, tmp;
   for (i = n - 1; i > 0; i--) {
     j = rand() % (i + 1);
-    tmp = (*arr)[j];
-    (*arr)[j] = (*arr)[i];
-    (*arr)[i] = tmp;
+    tmp = arr[j];
+    arr[j] = arr[i];
+    arr[i] = tmp;
+  }
+}
+
+void fill_diagonals(board board)
+{
+  // quadrant 1
+  int quad_one[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+  shuffle_arr(quad_one, 9);
+  int i = 0;
+  for (int x = 0; x < 3; x++) {
+    for (int y = 0; y < 3; y++) {
+      board_insert(board, x, y, quad_one[i]);
+      i++;
+    }
+  }
+
+  // quadrant 2
+  int quad_two[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+  shuffle_arr(quad_two, 9);
+  i = 0;
+  for (int x = 3; x < 5; x++) {
+    for (int y = 3; y < 5; y++) {
+      board_insert(board, x, y, quad_two[i]);
+      i++;
+    }
+  }
+
+  // quadrant 3
+  int quad_three[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+  shuffle_arr(quad_three, 9);
+  i = 0;
+  for (int x = 7; x < 9; x++) {
+    for (int y = 7; y < 9; y++) {
+      board_insert(board, x, y, quad_three[i]);
+      i++;
+    }
   }
 }
 
@@ -31,11 +68,13 @@ static inline void shuffle_arr(int (*arr)[], int n)
 #include "unittest.h"
 
 int test_shuffle(void);
+int test_fill_diagonals(void);
 
 int main()
 {
   int failed = 0;
   failed += test_shuffle();
+  failed += test_fill_diagonals();
 
   if (failed) {
     printf("FAIL %d test cases\n", failed);
@@ -51,8 +90,22 @@ int test_shuffle(void)
   START_TEST_CASE("shuffle array");
   int row_og[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
   int row[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-  shuffle_arr(&row, 9);
+  shuffle_arr(row, 9);
+  for (int i = 0; i < 9; i++) {
+    printf("%d ", row[i]);
+  }
+  printf("\n");
   EXPECT(row[0] != row_og[0] || row[1] != row_og[1]);
+  END_TEST_CASE;
+  return TEST_RESULT;
+}
+
+int test_fill_diagonals(void)
+{
+  START_TEST_CASE("fill diagonals");
+  board board;
+  fill_diagonals(board);
+  board_print(board);
   END_TEST_CASE;
   return TEST_RESULT;
 }

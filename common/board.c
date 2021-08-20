@@ -19,11 +19,6 @@
 /************* Data Structs *************/
 typedef int board[9][9];
 
-typedef struct editable_spots {
-  int **coords;
-  int num_spots; 
-} editable_spots_t;
-
 
 
 /********** Function Prototypes ************/
@@ -106,6 +101,7 @@ void board_scan(board board, FILE* fp){
 // }
 
 #ifdef UNIT_TEST
+#if BOARD
 #include <stdio.h>
 #include "unittest.h"
 
@@ -160,5 +156,5 @@ int test_scan_board(board board)
     END_TEST_CASE;
     return 0;
 }
-
+#endif
 #endif

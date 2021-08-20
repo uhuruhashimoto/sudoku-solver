@@ -9,18 +9,12 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include "board.h"
 
-typedef int board[9][9]; // this is temporary until board.h is updated
+void backtrack(board board, editable_spots_t editable_spots, const int max_solutions, int cur_index, int *num_solutions);
 
-struct editable_spots { // this is temporary until board.h is updated
-  int **coords;
-  int num_spots; 
-};
+void fill_diagonals(board board);
 
-bool backtrack(board *board, struct editable_spots spots, const int max_solutions, int cur_index, int *num_solutions);
-
-board* filled_diagonals(void);
-
-void remove_random_cell(board* board);
+void remove_random_cell(board board);
 
 #endif
