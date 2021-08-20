@@ -19,4 +19,8 @@ struct editable_spots { // this is temporary until board.h is updated
 
 bool backtrack(board *board, struct editable_spots spots, const int max_solutions, int cur_index, int *num_solutions);
 
+board* filled_diagonals(void);
+
+void remove_random_cell(board* board);
+
 #endif
