@@ -19,7 +19,7 @@
 /**************** global types ****************/
 typedef int board[9][9];
 
-typedef struct editable_spots_t;
+typedef struct editable_spots editable_spots_t;
 /**************** board_new ****************/
 /* creates a new, empty board
  * returns: a pointer to the new board
@@ -77,6 +77,13 @@ bool is_valid(board* board);
  * 
  */
 bool is_complete(board* board);
+
+
+/**************** board_delete ****************/
+/* returns: void 
+ * 
+ */
+void board_delete(board *to_delete); 
 
 
 #endif // __BOARD_H

@@ -30,29 +30,30 @@ typedef struct editable_spots {
 
 /**************** board_new ****************/
 board* board_new() {
-    board *new = calloc(sizeof(int[9][9]), 1);
+    board *new = malloc(sizeof(int[9][9]));
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 0; j++) {
+            *new[i][j] = 0;
+        }
+    }
 	return new;
 }
 
 
 /**************** board_insert ****************/
 void board_insert(board* board, int row, int column, int value){
-    
     *board[row][column] = value;
-
 }
 
 
 /**************** board_print ****************/
 void board_print(board* board){
-    
-    for(int i=0; i<9; i++){
-        for(int j=0; j<9; j++){
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
             fprintf(stdout, "%d ", *board[i][j]);
         }
         fprintf(stdout, "\n");
     }
-
 }
 
 
@@ -63,7 +64,7 @@ board* board_scan(FILE* fp){
     char* row;
     printf("NEW BOARD\n");
     board_print(new);
-    
+
     while((row = freadlinep(fp))!=NULL && i < 9){
         printf("NEW NEW BOARD\n");
         board_print(new);
@@ -86,15 +87,14 @@ board* board_scan(FILE* fp){
 
             int j = 0;
             while(value!=NULL && j < 9){
-                printf("VALUE: %s\n", value);
-                int val = atoi(value);
-                printf("val: %d\n", val);
+                int val;
+                sscanf(value, "%d", &val);
                 *new[i][j] = val;
+                printf("made (%d, %d) equal to %d\n", i, j, val);
                 j++;
 
                 board_print(new);
-                
-                
+
                 value = strtok(NULL, " \t");
             }
             i++;
@@ -103,6 +103,11 @@ board* board_scan(FILE* fp){
         }
     }
     return new;
+}
+
+void board_delete(board *to_delete) 
+{
+    free(to_delete);
 }
 
 #ifdef UNIT_TEST
