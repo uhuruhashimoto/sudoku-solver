@@ -20,7 +20,6 @@ $(LIB): $(OBJS)
 board.o: board.h 
 utilities.o: utilities.h 
 file.o: file.h
-unittest.o: unittest.h
 
 .PHONY: clean unit_board unit_utilities
 
