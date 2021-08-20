@@ -19,7 +19,10 @@
 /**************** global types ****************/
 typedef int board[9][9];
 
-typedef struct editable_spots editable_spots_t;
+typedef struct editable_spots {
+  int (*coords)[2];
+  int num_spots; 
+} editable_spots_t;
 /**************** board_new ****************/
 /* creates a new, empty board
  * returns: a pointer to the new board
@@ -61,7 +64,7 @@ int board_get(board board, int row, int column);
  * or marked as "zero"
  * 
  */
-editable_spots_t* board_editable_spots(board* board);
+editable_spots_t board_editable_spots(board board);
 
 /**************** is_valid ****************/
 /* returns: false if the board breaks any rules,

@@ -19,11 +19,6 @@
 /************* Data Structs *************/
 typedef int board[9][9];
 
-typedef struct editable_spots {
-  int **coords;
-  int num_spots; 
-} editable_spots_t;
-
 
 
 /********** Function Prototypes ************/
@@ -56,12 +51,15 @@ void board_print(board board){
     }
 }
 
+/**************** board_get ****************/
+int board_get(board board, int row, int column){
+
+}
 
 // /**************** board_scan ****************/
 void board_scan(board board, FILE* fp){
     int i=0;
     char* row;
-    board_print(board);
 
     while((row = freadlinep(fp))!=NULL && i < 9){
 
@@ -89,8 +87,6 @@ void board_scan(board board, FILE* fp){
 
                 j++;
 
-                board_print(board);
-
                 value = strtok(NULL, " ");
             }
             i++;
@@ -100,10 +96,41 @@ void board_scan(board board, FILE* fp){
     }
 }
 
-// void board_delete(board *to_delete) 
-// {
-//     free(to_delete);
-// }
+/**************** board_editable_spots ****************/
+editable_spots_t board_editable_spots(board board){
+    int length=0;
+
+    for(int i=0; i<9; i++){
+        for(int j=0; j<9; j++){
+            if(board[i][j]==0){
+                length++;
+            }
+        }
+    }
+
+    editable_spots_t editable_spots;
+
+    editable_spots.coords = calloc(sizeof(int[2]), length);
+
+    editable_spots.num_spots = length;
+
+    int index=0;
+    for(int i=0; i<9; i++){
+        for(int j=0; j<9; j++){
+            if(board[i][j]==0){
+                
+                editable_spots.coords[index][0] = i;
+                editable_spots.coords[index][1] = j;
+                index++; 
+            }
+        }
+    }
+    return editable_spots;
+}
+
+
+
+
 
 #ifdef UNIT_TEST
 #include <stdio.h>
@@ -112,6 +139,8 @@ void board_scan(board board, FILE* fp){
 int test_new_board(board board);
 int test_print_board(board board);
 int test_scan_board(board board);
+int test_editable_spots(board board);
+
 
 int main(){
     board new;
@@ -125,6 +154,7 @@ int main(){
     failures += test_new_board(new);
     failures += test_print_board(new);
     failures += test_scan_board(new);
+    failures += test_editable_spots(new);
     printf("FAIL %d test cases\n", failures);
     return failures;
 
@@ -157,6 +187,22 @@ int test_scan_board(board board)
     board_scan(board, stdin);
 
     board_print(board);
+    END_TEST_CASE;
+    return 0;
+}
+
+int test_editable_spots(board board)
+{
+    START_TEST_CASE("editable spots");
+    board_scan(board, stdin);
+
+
+    editable_spots_t editable_spots=board_editable_spots(board);
+    for(int i=0; i<editable_spots.num_spots; i++){
+        printf("%d, %d ", editable_spots.coords[i][0], editable_spots.coords[i][1]);
+        
+    }
+    
     END_TEST_CASE;
     return 0;
 }
