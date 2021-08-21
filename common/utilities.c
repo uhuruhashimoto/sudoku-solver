@@ -60,6 +60,31 @@ void fill_diagonals(board board)
   }
 }
 
+bool backtrack(board board, editable_spots_t editable_spots, const int max_solutions, int cur_index, int *num_solutions)
+{
+  if (cur_index >= editable_spots.num_spots) {
+    return false;
+  }
+
+  for (int i = 1; i <= 9; i++) {
+    board_insert(board, editable_spots.coords[cur_index][0], editable_spots.coords[cur_index][1], i);
+    if (is_valid(board)) {
+      if (is_complete(board)) {
+        (*num_solutions)++;
+        if (*num_solutions >= max_solutions) {
+          return true;
+        }
+      }
+      if (backtrack(board, editable_spots, max_solutions, cur_index + 1, num_solutions)) {
+        return true;
+      }
+    }
+  }
+
+  board_insert(board, editable_spots.coords[cur_index][0], editable_spots.coords[cur_index][1], 0);
+  return false;
+}
+
 /** Unit tests **/
 
 #ifdef UNIT_TEST_UTIL
@@ -68,6 +93,7 @@ void fill_diagonals(board board)
 
 int test_shuffle(void);
 int test_fill_diagonals(void);
+int test_backtrack(void);
 
 int main()
 {
@@ -75,6 +101,7 @@ int main()
   int failed = 0;
   failed += test_shuffle();
   failed += test_fill_diagonals();
+  failed += test_backtrack();
 
   if (failed) {
     printf("FAIL %d test cases\n", failed);
@@ -110,6 +137,28 @@ int test_fill_diagonals(void)
         }
   }
   fill_diagonals(board);
+  // board_print(board);
+  END_TEST_CASE;
+  return TEST_RESULT;
+}
+
+int test_backtrack(void)
+{
+  START_TEST_CASE("backtrack");
+  board board;
+  // for (int i = 0; i < 9; i++) {
+  //   for (int j = 0; j < 9; j++) {
+  //       board[i][j] = 0;
+  //   }
+  // }
+  // fill_diagonals(board);
+  FILE *fp = fopen("./test_board_2.txt", "r");
+  board_scan(board, fp);
+  fclose(fp);
+  editable_spots_t spots = board_editable_spots(board);
+  int num_solutions = 0;
+  bool solved = backtrack(board, spots, 1, 0, &num_solutions);
+  EXPECT(solved);
   board_print(board);
   END_TEST_CASE;
   return TEST_RESULT;
