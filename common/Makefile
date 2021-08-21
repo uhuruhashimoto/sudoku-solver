@@ -7,10 +7,16 @@
 OBJS = board.o utilities.o file.o
 LIB = common.a
 
-FLAGS = -DUNIT_TEST # -DMEMTEST  # -DDEBUG 
+FLAGS = # -DUNIT_TEST # -DUNIT_TEST_UTIL # -DMEMTEST  # -DDEBUG 
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS)
 CC = gcc
+
+BOARD_UNIT=unit_board
+UTIL_UNIT=unit_utilities
+
+$(BOARD_UNIT): FLAGS += -DUNIT_TEST_BOARD
+$(UTIL_UNIT): FLAGS += -DUNIT_TEST_UTIL
 
 # Build the library by archiving object files
 $(LIB): $(OBJS)
@@ -18,10 +24,10 @@ $(LIB): $(OBJS)
 
 # unit test target for board
 unit_board: board.o unittest.h file.o
-	$(CC) $(CFLAGS) $^ -o unit_board
+	$(CC) $(CFLAGS) $(EXTRA_FLAGS) $^ -o unit_board
 
-unit_utilities: utilities.o 
-	$(CC) $(CFLAGS) -DUNIT_TEST $^ -o unit_utilities
+unit_utilities: utilities.o unittest.h board.o file.o
+	$(CC) $(CFLAGS) $(EXTRA_FLAGS) $^ -o unit_utilities
 
 
 # Dependencies: object files depend on header files
@@ -36,3 +42,5 @@ clean:
 	rm -f core
 	rm -f $(LIB) *~ *.o
 	rm -f unit_*
+
+unit:	unit_utilities unit_board
