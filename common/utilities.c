@@ -15,7 +15,6 @@
 
 static inline void shuffle_arr(int arr[], int n)
 {
-  srand ( time(NULL) );
   int i, j, tmp;
   for (i = n - 1; i > 0; i--) {
     j = rand() % (i + 1);
@@ -72,6 +71,7 @@ int test_fill_diagonals(void);
 
 int main()
 {
+  srand ( time(NULL) );
   int failed = 0;
   failed += test_shuffle();
   failed += test_fill_diagonals();
