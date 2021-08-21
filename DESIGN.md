@@ -97,7 +97,7 @@ Returns: board with >=40 empty spots and one unique solution
 2. Solve board
     - call solve() on board to return a fully solved board
 3. While we’ve removed fewer than 40 numbers: 
-4. Remove numbers from solved board at random 
+    - Remove numbers from solved board at random 
         - Call backtrack to see if there is a unique solution to the puzzle now that another number has been removed
         - If so, continue to remove numbers, if not, put back the number we just removed and try a different random square to remove 
         - If none of the squares removed give a unique solution, backtrack and put back the previous square as well 
