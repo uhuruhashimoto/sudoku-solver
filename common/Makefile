@@ -7,7 +7,7 @@
 OBJS = board.o utilities.o file.o
 LIB = common.a
 
-FLAGS = -DUNIT_TEST -DUNIT_TEST_UTIL # -DMEMTEST  # -DDEBUG 
+FLAGS = -DUNIT_TEST # -DUNIT_TEST_UTIL # -DMEMTEST  # -DDEBUG 
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS)
 CC = gcc
@@ -15,8 +15,8 @@ CC = gcc
 BOARD_UNIT=unit_board
 UTIL_UNIT=unit_utilities
 
-$(BOARD_UNIT): EXTRA_FLAGS := -DUNIT_TEST_BOARD
-$(UTIL_UNIT): EXTRA_FLAGS := -DUNIT_TEST_UTIL
+$(BOARD_UNIT): CFLAGS += -DUNIT_TEST_BOARD
+$(UTIL_UNIT): CFLAGS += -DUNIT_TEST_UTIL
 
 # Build the library by archiving object files
 $(LIB): $(OBJS)

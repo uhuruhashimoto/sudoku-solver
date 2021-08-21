@@ -42,8 +42,8 @@ void fill_diagonals(board board)
   int quad_two[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
   shuffle_arr(quad_two, 9);
   i = 0;
-  for (int x = 3; x < 5; x++) {
-    for (int y = 3; y < 5; y++) {
+  for (int x = 3; x < 6; x++) {
+    for (int y = 3; y < 6; y++) {
       board_insert(board, x, y, quad_two[i]);
       i++;
     }
@@ -53,8 +53,8 @@ void fill_diagonals(board board)
   int quad_three[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
   shuffle_arr(quad_three, 9);
   i = 0;
-  for (int x = 7; x < 9; x++) {
-    for (int y = 7; y < 9; y++) {
+  for (int x = 6; x < 9; x++) {
+    for (int y = 6; y < 9; y++) {
       board_insert(board, x, y, quad_three[i]);
       i++;
     }
@@ -63,7 +63,7 @@ void fill_diagonals(board board)
 
 /** Unit tests **/
 
-#ifdef UNIT_TEST
+#ifdef UNIT_TEST_UTIL
 #include <stdio.h>
 #include "unittest.h"
 
@@ -104,6 +104,11 @@ int test_fill_diagonals(void)
 {
   START_TEST_CASE("fill diagonals");
   board board;
+  for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            board[i][j] = 0;
+        }
+  }
   fill_diagonals(board);
   board_print(board);
   END_TEST_CASE;
