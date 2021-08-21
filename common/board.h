@@ -19,7 +19,12 @@
 /**************** global types ****************/
 typedef int board[9][9];
 
-typedef struct editable_spots_t;
+typedef struct editable_spots {
+  int (*coords)[2];
+  int num_spots; 
+} editable_spots_t;
+
+
 /**************** board_new ****************/
 /* creates a new, empty board
  * returns: a pointer to the new board
@@ -32,21 +37,21 @@ board* board_new();
  *
  * 
  */
-void board_insert(board* board, int row, int column, int value);
+void board_insert(board board, int row, int column, int value);
 
 /**************** board_print ****************/
 /* prints out a given board
  * 
  *        
  */
-void board_print(board* board);
+void board_print(board board);
 
 /**************** board_scan ****************/
 /* scans a board from stdin
  * returns: a pointer to a scanned-in board
  * 
  */
-board* board_scan(FILE* fp);
+void board_scan(board board, FILE* fp);
 
 
 /**************** board_get ****************/
@@ -54,21 +59,21 @@ board* board_scan(FILE* fp);
  * row and column value
  * 
  */
-int board_get(board* board, int row, int column);
+int board_get(board board, int row, int column);
 
 /**************** board_editable_spots ****************/
 /* returns: an array of coordinates that are editable
  * or marked as "zero"
  * 
  */
-editable_spots_t* board_editable_spots(board* board);
+editable_spots_t board_editable_spots(board board);
 
 /**************** is_valid ****************/
 /* returns: false if the board breaks any rules,
  * true if the board is valid
  * 
  */
-bool is_valid(board* board);
+bool is_valid(board board);
 
 
 /**************** is_complete ****************/
@@ -76,7 +81,15 @@ bool is_valid(board* board);
  * false if still empty spots left
  * 
  */
-bool is_complete(board* board);
+bool is_complete(board board);
+
+
+/**************** editable_spots_delete ****************/
+/* returns: void 
+ * frees space used to store array of coordinates
+ * 
+ */
+void editable_spots_delete(editable_spots_t editable_spots); 
 
 
 #endif // __BOARD_H
