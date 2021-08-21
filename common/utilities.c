@@ -15,12 +15,12 @@
 
 static inline void shuffle_arr(int arr[], int n)
 {
-  int i, j, tmp;
+  int i, j, temp;
   for (i = n - 1; i > 0; i--) {
     j = rand() % (i + 1);
-    tmp = arr[j];
+    temp = arr[j];
     arr[j] = arr[i];
-    arr[i] = tmp;
+    arr[i] = temp;
   }
 }
 
