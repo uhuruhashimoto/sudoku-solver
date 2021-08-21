@@ -67,7 +67,7 @@ void board_scan(board board, FILE* fp)
     int i = 0;
     char* row;
 
-    while((row = freadlinep(fp)) != NULL && i < 8){
+    while((row = freadlinep(fp)) != NULL && i < 9){
 
         if(strlen(row) != 18){
             free(row);
@@ -201,6 +201,22 @@ static bool is_in(int num, int array[9])
     return false;
 }
 
+bool is_complete(board board)
+{
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (board[i][j] == 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void editable_spots_delete(editable_spots_t editable_spots) 
+{
+    free(editable_spots.coords);
+}
 
 
 
@@ -209,12 +225,14 @@ static bool is_in(int num, int array[9])
 #include <stdio.h>
 #include "unittest.h"
 
+
 int test_new_board(board board);
 int test_print_board(board board);
 int test_scan_board(board board);
 int test_editable_spots(board board);
 int test_board_get(board board);
 int test_board_valid(board board, char *filepath);
+int test_board_complete(board board, char *filepath);
 
 
 // comment and uncomment tests as needed
@@ -233,6 +251,7 @@ int main(){
     // failures += test_editable_spots(new);
     // failures += test_board_get(new);
     failures += test_board_valid(new, "test_board.txt");
+    failures += test_board_complete(new, "test_board.txt");
     printf("FAIL %d test cases\n", failures);
     return failures;
 
@@ -296,8 +315,7 @@ int test_board_get(board board) {
     return 0;
 }
 
-// TODO: unit test with fixed boards (from file) instead of having 
-// to read from stdin 
+// TODO: unit test with fixed coords to confirm validity 
 int test_board_valid(board board, char *filepath) {
     START_TEST_CASE("boardvalid");
     
@@ -310,6 +328,25 @@ int test_board_valid(board board, char *filepath) {
     board_print(board);
 
     printf(is_valid(board) ? "is valid\n" : "is invalid\n");
+    fclose(fp);
+    END_TEST_CASE;
+    
+    return 0;
+}
+
+int test_board_complete(board board, char *filepath) {
+    START_TEST_CASE("boardcomplete");
+    
+    FILE *fp = fopen(filepath, "r");
+    if (fp == NULL) {
+        return 1;
+    }
+    board_scan(board, fp);
+    printf("input board for is_complete:\n");
+    board_print(board);
+    printf("\n");
+
+    printf(is_complete(board) ? "is complete\n" : "is not complete\n");
     fclose(fp);
     END_TEST_CASE;
     

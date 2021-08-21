@@ -23,6 +23,8 @@ typedef struct editable_spots {
   int (*coords)[2];
   int num_spots; 
 } editable_spots_t;
+
+
 /**************** board_new ****************/
 /* creates a new, empty board
  * returns: a pointer to the new board
