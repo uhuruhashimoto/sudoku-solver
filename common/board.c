@@ -221,7 +221,7 @@ void editable_spots_delete(editable_spots_t editable_spots)
 
 
 
-#ifdef UNIT_TEST
+#ifdef UNIT_TEST_BOARD
 #include <stdio.h>
 #include "unittest.h"
 
