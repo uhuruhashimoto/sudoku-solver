@@ -67,7 +67,7 @@ void board_scan(board board, FILE* fp)
     int i = 0;
     char* row;
 
-    while((row = freadlinep(fp)) != NULL && i < 9){
+    while(i < 9 && (row = freadlinep(fp)) != NULL){
 
         if(strlen(row) != 18){
             free(row);
