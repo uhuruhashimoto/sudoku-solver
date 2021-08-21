@@ -222,7 +222,6 @@ void editable_spots_delete(editable_spots_t editable_spots)
 
 
 #ifdef UNIT_TEST
-#if BOARD
 #include <stdio.h>
 #include "unittest.h"
 
@@ -288,9 +287,6 @@ int test_scan_board(board board)
     END_TEST_CASE;
     return 0;
 }
-<<<<<<< HEAD
-#endif
-=======
 
 int test_editable_spots(board board)
 {
@@ -357,5 +353,4 @@ int test_board_complete(board board, char *filepath) {
     return 0;
 }
 
->>>>>>> e90c2516f4ef8e1cdf7f87438611de90d9dd3d80
 #endif

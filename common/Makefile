@@ -43,4 +43,4 @@ clean:
 	rm -f $(LIB) *~ *.o
 	rm -f unit_*
 
-unit:	unit_utilities
+unit:	unit_utilities unit_board
