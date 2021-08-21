@@ -36,7 +36,7 @@ solve.o: ../common/board.h ../common/utilities.h
 
 create.o: ../common/board.h ../common/utilities.h
 
-sudoku.o: solve.h create.h 
+sudoku.o: solve.h create.h ../common/board.h
 
 
 .PHONY: all test clean
