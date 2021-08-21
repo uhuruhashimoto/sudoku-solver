@@ -25,11 +25,10 @@ typedef struct editable_spots {
 } editable_spots_t;
 
 /**************** board_new ****************/
-/* creates a new, empty board
- * returns: a pointer to the new board
- * 
+/* returns void
+ * sets all elements in array to 0 
  */
-board* board_new();
+void board_initialize(board board);
 
 /**************** board_insert ****************/
 /* inserts a value into a specifc cell of the board
