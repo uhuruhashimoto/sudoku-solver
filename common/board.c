@@ -149,7 +149,7 @@ bool is_valid(board board)
 
     // check blocks 
     for (int block = 0; block < 9; block++) {
-        int row = block / 3;
+        int row = (block / 3) * 3;
         int col = (block % 3) * 3;
         
 
