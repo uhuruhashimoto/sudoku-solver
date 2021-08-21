@@ -24,16 +24,14 @@ typedef int board[9][9];
 static bool is_in(int num, int array[9]);
 static bool unique_and_valid(int value, int numbers[9], int *index);
 
-/**************** board_new ****************/
-board* board_new() 
+/**************** board_initialize ****************/
+void board_initialize(board board) 
 {
-    board *new = malloc(sizeof(int[9][9]));
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            *new[i][j] = 0;
+            board[i][j] = 0;
         }
     }
-	return new;
 }
 
 
