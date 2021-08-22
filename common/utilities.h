@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include "board.h"
 
-void backtrack(board board, editable_spots_t editable_spots, const int max_solutions, int cur_index, int *num_solutions);
+bool backtrack(board board, editable_spots_t editable_spots, const int max_solutions, int cur_index, int *num_solutions);
 
 void fill_diagonals(board board);
 
