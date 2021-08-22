@@ -13,7 +13,7 @@
 #include "utilities.h"
 #include "board.h"
 
-static inline void shuffle_arr(int arr[], int n)
+void shuffle_arr(int arr[], int n)
 {
   int i, j, temp;
   for (i = n - 1; i > 0; i--) {

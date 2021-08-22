@@ -17,4 +17,8 @@ void fill_diagonals(board board);
 
 void remove_random_cell(board board);
 
+void shuffle_arr(int *arr, int n);
+
+void shuffle_arr_pointer(void* arr[], int n);
+
 #endif
