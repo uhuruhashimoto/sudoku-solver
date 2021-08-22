@@ -15,14 +15,20 @@ typedef struct spots {
   int num_spots; 
 } spots_t;
 
+/****** STATIC HELPERS ******/
+static bool already_removed(int x, int y, spots_t removed);
+static void initialize_to_remove(int to_remove[81][2]);
+static bool remove_spots(board board, int to_remove[81][2], spots_t removed);
+
 void create(board board) {
     //initialize data structures
     board_initialize(board);
-    editable_spots_t spots = board_editable_spots(board);
+    
     int num_solutions = 0;
 
     //fill diagonals
     fill_diagonals(board);
+    editable_spots_t spots = board_editable_spots(board);
     
     //solve
     backtrack(board, spots, 1, 0, &num_solutions);
@@ -31,48 +37,51 @@ void create(board board) {
     //create and shuffle to_remove (all slots in board)
     int to_remove[81][2];
     initialize_to_remove(to_remove);
-    shuffle_arr(to_remove, 81);
+    shuffle_arr_twod(to_remove, 81);
     //initialize removed
     spots_t removed;
+    removed.num_spots = 0;
 
     //create board recursively
     remove_spots(board, to_remove, removed);
 
-    //print board
+    //print boardstat
     board_print(board);
 }
 
-static bool already_removed(int spot[2], spots_t removed);
 
 //recursive helper for board creation (backtrack equivalent)
-bool remove_spots(board board, int to_remove[81][2], spots_t removed) {
+static bool remove_spots(board board, int to_remove[81][2], spots_t removed)
+{
     if (removed.num_spots >= 40) {
         return false;
     }
+    printf("num spots removed: %d\n", removed.num_spots);
 
     // look through every spot in board
     for (int i = 0; i < 81; i++) {
-        int spot[2] = to_remove[i];
+        int x = to_remove[i][0];
+        int y = to_remove[i][1];
         // if it hasn't been removed, remove it and check for unique solutions
-        if (!already_removed(spot, removed)) {
+        if (!already_removed(x, y, removed)) {
             // store coords and val in removed
             removed.num_spots++;
             int length = removed.num_spots;
-            removed.coords[length - 1][0] = spot[0];
-            removed.coords[length - 1][1] = spot[1];
-            removed.coords[length - 1][2] = board_get(board, spot[0], spot[1]);
+            removed.coords[length - 1][0] = x;
+            removed.coords[length - 1][1] = y;
+            removed.coords[length - 1][2] = board_get(board, x, y);
             //remove spot
-            board_insert(board, spot[0], spot[1], 0);
+            board_insert(board, x, y, 0);
             //check if board has unique solution
             int num_solutions = 0;
-            backtrack(board, board_editable_spots(board), 1, 0, &num_solutions);
+            backtrack(board, board_editable_spots(board), 2, 0, &num_solutions);
             if (num_solutions == 1) { // unique solution
                 if (removed.num_spots >= 40) return true; // stop recursing
                 if (remove_spots(board, to_remove, removed)) return true;
             } 
             // put it back
             else {
-                board_insert(board, spot[0], spot[1], removed.coords[length - 1][2]);
+                board_insert(board, x, y, removed.coords[length - 1][2]);
                 removed.coords[length - 1][0] = 0;
                 removed.coords[length - 1][1] = 0;
                 removed.coords[length - 1][2] = 0;
@@ -88,10 +97,10 @@ bool remove_spots(board board, int to_remove[81][2], spots_t removed) {
 }
 
 
-static bool already_removed(int spot[2], spots_t removed)
+static bool already_removed(int x, int y, spots_t removed)
 {
     for (int i = 0; i < removed.num_spots; i++) {
-        if (removed.coords[i][0] == spot[0] && removed.coords[i][1] == spot[1]) {
+        if (removed.coords[i][0] == x && removed.coords[i][1] == y) {
             return true;
         }
     }
@@ -109,3 +118,41 @@ static void initialize_to_remove(int to_remove[81][2])
         }
     }
 }
+
+
+
+/** Unit tests **/
+
+#ifdef UNIT_TEST_CREATE
+#include <stdio.h>
+#include "../common/unittest.h"
+
+int test_create(void);
+
+
+int main()
+{
+  srand ( time(NULL) );
+  int failed = 0;
+  failed += test_create();
+
+  if (failed) {
+    printf("FAIL %d test cases\n", failed);
+    return failed;
+  } else {
+    printf("PASS all test cases\n");
+    return 0;
+  }
+}
+
+int test_create(void)
+{
+  START_TEST_CASE("create puzzle");
+
+  board board;
+  create(board);
+  
+  return TEST_RESULT;
+}
+
+#endif // UNIT_TEST_CREATE
