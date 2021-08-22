@@ -19,6 +19,8 @@ typedef struct spots {
 static bool already_removed(int x, int y, spots_t removed);
 static void initialize_to_remove(int to_remove[81][2]);
 static bool remove_spots(board board, int to_remove[81][2], spots_t removed);
+static void copy_board(board original, board copy);
+
 
 void create(board board) {
     //initialize data structures
@@ -43,7 +45,8 @@ void create(board board) {
     removed.num_spots = 0;
 
     //create board recursively
-    remove_spots(board, to_remove, removed);
+    bool ret_value = remove_spots(board, to_remove, removed);
+    printf(ret_value ? "true\n" : "false\n");
 
     //print boardstat
     board_print(board);
@@ -51,9 +54,9 @@ void create(board board) {
 
 
 //recursive helper for board creation (backtrack equivalent)
-static bool remove_spots(board board, int to_remove[81][2], spots_t removed)
+static bool remove_spots(board puzzle, int to_remove[81][2], spots_t removed)
 {
-    if (removed.num_spots >= 40) {
+    if (removed.num_spots >= 41) {
         return false;
     }
     printf("num spots removed: %d\n", removed.num_spots);
@@ -69,24 +72,27 @@ static bool remove_spots(board board, int to_remove[81][2], spots_t removed)
             int length = removed.num_spots;
             removed.coords[length - 1][0] = x;
             removed.coords[length - 1][1] = y;
-            removed.coords[length - 1][2] = board_get(board, x, y);
+            removed.coords[length - 1][2] = board_get(puzzle, x, y);
             //remove spot
-            board_insert(board, x, y, 0);
+            board_insert(puzzle, x, y, 0);
             //check if board has unique solution
             int num_solutions = 0;
-            backtrack(board, board_editable_spots(board), 2, 0, &num_solutions);
+            board copy;
+            copy_board(puzzle, copy);
+            backtrack(copy, board_editable_spots(puzzle), 2, 0, &num_solutions);
             if (num_solutions == 1) { // unique solution
-                if (removed.num_spots >= 40) return true; // stop recursing
-                if (remove_spots(board, to_remove, removed)) return true;
+                if (removed.num_spots >= 41) return true; // stop recursing
+                if (remove_spots(puzzle, to_remove, removed)) return true;
             } 
             // put it back
-            else {
-                board_insert(board, x, y, removed.coords[length - 1][2]);
-                removed.coords[length - 1][0] = 0;
-                removed.coords[length - 1][1] = 0;
-                removed.coords[length - 1][2] = 0;
-                removed.num_spots--;
-            } 
+
+            board_insert(puzzle, x, y, removed.coords[length - 1][2]);
+            removed.coords[length - 1][0] = 0;
+            removed.coords[length - 1][1] = 0;
+            removed.coords[length - 1][2] = 0;
+            removed.num_spots--;
+            fprintf(stdout, "removed spots is decremented from %d to %d\n", removed.num_spots+1, removed.num_spots);
+
         }
         else { // already removed, try next spot 
             continue;
@@ -119,12 +125,22 @@ static void initialize_to_remove(int to_remove[81][2])
     }
 }
 
+static void copy_board(board original, board copy)
+{
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            copy[i][j] = original[i][j];
+        }
+    }
+}
+
 
 
 /** Unit tests **/
 
 #ifdef UNIT_TEST_CREATE
 #include <stdio.h>
+#include <time.h>
 #include "../common/unittest.h"
 
 int test_create(void);

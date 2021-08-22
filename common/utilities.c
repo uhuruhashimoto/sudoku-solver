@@ -110,6 +110,7 @@ bool backtrack(board board, editable_spots_t editable_spots, const int max_solut
 int test_shuffle(void);
 int test_fill_diagonals(void);
 int test_backtrack(void);
+int test_max_solutions(void);
 
 int main()
 {
@@ -118,6 +119,7 @@ int main()
   failed += test_shuffle();
   failed += test_fill_diagonals();
   failed += test_backtrack();
+  failed += test_max_solutions();
 
   if (failed) {
     printf("FAIL %d test cases\n", failed);
@@ -174,9 +176,28 @@ int test_backtrack(void)
   editable_spots_t spots = board_editable_spots(board);
   int num_solutions = 0;
   bool solved = backtrack(board, spots, 1, 0, &num_solutions);
-  printf("%d\n", num_solutions);
+  printf("num solutions: %d\n", num_solutions);
   EXPECT(solved);
   board_print(board);
+  END_TEST_CASE;
+  return TEST_RESULT;
+}
+
+int test_max_solutions(void)
+{
+  START_TEST_CASE("max solutions");
+  board board;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+        board[i][j] = 0;
+    }
+  }
+  fill_diagonals(board);
+  editable_spots_t spots = board_editable_spots(board);
+  int num_solutions = 0;
+  bool solved = backtrack(board, spots, 2, 0, &num_solutions);
+  EXPECT(num_solutions == 2);
+  EXPECT(solved);
   END_TEST_CASE;
   return TEST_RESULT;
 }
