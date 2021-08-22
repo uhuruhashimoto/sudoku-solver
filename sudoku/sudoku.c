@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include "solve.h"
 #include "create.h"
+#include "../common/board.h"
 
 const int ERROR_NUM_ARGS = 1;
 const int ERROR_ARG = 2;
@@ -29,11 +30,14 @@ int main(const int argc, const char *argv[])
         exit(validated);
     }
 
+    board board;
+    board_initialize(board);
+
     if (strcmp(argv[1], "solve")) {
-        solve();
+        solve(board);
     }
     else {
-        create();
+        create(board);
     }
 
     return 0;
