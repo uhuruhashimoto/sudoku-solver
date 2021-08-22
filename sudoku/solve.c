@@ -6,7 +6,7 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "board.h"
+#include "../common/board.h"
 
 // solve - scans, solves, and prints board
 void solve(board puzzle) {
