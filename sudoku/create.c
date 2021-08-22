@@ -10,70 +10,102 @@
 #include "../common/utilities.h"
 #include "solve.h"
 
-//create takes an empty board from main, fills it, and prints it
+typedef struct spots {
+  int coords[81][3];
+  int num_spots; 
+} spots_t;
+
 void create(board board) {
-    const int min_removed = 40;
-    
-    //Fill diagonal quadrants in board 
+    //initialize data structures
+    board_initialize(board);
+    editable_spots_t spots = board_editable_spots(board);
+    int num_solutions = 0;
+
+    //fill diagonals
     fill_diagonals(board);
-
-    //solve board to fill other squares
-    solve(board);
-
-    //remove numbers from board
-    int *num_removed = malloc(sizeof(int));
-    remove_numbers(board, num_removed, min_removed);
-
-    //print board and message
-    fprintf(stdout, "NEW BOARD WITH %d NUMBERS REMOVED: \n", *num_removed);
-    board_print(board);
-
-    //clean up
-    free(num_removed);
-}
-
-//recursive loop: removes numbers while maintaining solveable board until the board has >40 empty spots
-bool remove_numbers(board board, int *num_removed, const int min_removed) {
-    //loop: continue while removed < 40
-    if (*num_removed > min_removed) return;
     
-    // remove random number
-    int *x = malloc(sizeof(int));
-    int *y = malloc(sizeof(int));
-    int removed = remove_random_number(board, x, y);
-        
-    // call backtrack to see if puzzle has unique solution
-    if (backtrack(board)) {
-        // if so, call remove_numbers(board)
-        *num_removed++;
-        remove_numbers(board, *num_removed, min_removed);
+    //solve
+    backtrack(board, spots, 1, 0, &num_solutions);
+
+    //initialize data structures for recursive loop
+    //create and shuffle to_remove (all slots in board)
+    int to_remove[81][2];
+    initialize_to_remove(to_remove);
+    shuffle_arr(to_remove, 81);
+    //initialize removed
+    spots_t removed;
+
+    //create board recursively
+    remove_spots(board, to_remove, removed);
+
+    //print board
+    board_print(board);
+}
+
+static bool already_removed(int spot[2], spots_t removed);
+
+//recursive helper for board creation (backtrack equivalent)
+bool remove_spots(board board, int to_remove[81][2], spots_t removed) {
+    if (removed.num_spots >= 40) {
+        return false;
     }
 
-    // if not, put back the number we removed and try a different square
-    *num_removed--;
-    board_set(board, x, y, removed);
-    free(x); free(y);
-
+    // look through every spot in board
+    for (int i = 0; i < 81; i++) {
+        int spot[2] = to_remove[i];
+        // if it hasn't been removed, remove it and check for unique solutions
+        if (!already_removed(spot, removed)) {
+            // store coords and val in removed
+            removed.num_spots++;
+            int length = removed.num_spots;
+            removed.coords[length - 1][0] = spot[0];
+            removed.coords[length - 1][1] = spot[1];
+            removed.coords[length - 1][2] = board_get(board, spot[0], spot[1]);
+            //remove spot
+            board_insert(board, spot[0], spot[1], 0);
+            //check if board has unique solution
+            int num_solutions = 0;
+            backtrack(board, board_editable_spots(board), 1, 0, &num_solutions);
+            if (num_solutions == 1) { // unique solution
+                if (removed.num_spots >= 40) return true; // stop recursing
+                if (remove_spots(board, to_remove, removed)) return true;
+            } 
+            // put it back
+            else {
+                board_insert(board, spot[0], spot[1], removed.coords[length - 1][2]);
+                removed.coords[length - 1][0] = 0;
+                removed.coords[length - 1][1] = 0;
+                removed.coords[length - 1][2] = 0;
+                removed.num_spots--;
+            } 
+        }
+        else { // already removed, try next spot 
+            continue;
+        }
+    }
+    //return false
     return false;
-    // If none of the squares removed give a unique solution, backtrack and put back the previous square as well 
 }
 
-int remove_random_number(board board, int *x, int *y) {
-    //get random coordinates 
-    *x = get_random();
-    *y = get_random();
 
-    //if board is already empty there, keep looking
-    while (board_get(board, x, y) == 0) {
-        *x = get_random();
-        *y = get_random();
+static bool already_removed(int spot[2], spots_t removed)
+{
+    for (int i = 0; i < removed.num_spots; i++) {
+        if (removed.coords[i][0] == spot[0] && removed.coords[i][1] == spot[1]) {
+            return true;
+        }
     }
-
-    //if board is not empty, remove a number
-    board_insert(board, *x, *y, 0);
+    return false;
 }
 
-//returns random int from 1 to 9
-static int get_random() {
-    return (rand() % 9) + 1;
+static void initialize_to_remove(int to_remove[81][2])
+{
+    int index = 0;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            to_remove[index][0] = i;
+            to_remove[index][1] = j;
+            index++;
+        }
+    }
 }

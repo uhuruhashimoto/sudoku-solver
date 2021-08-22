@@ -1,5 +1,5 @@
 /* 
- * create.h - header file for solve module
+ * create.h - header file for create module
  *
  * Description: 
  * 
