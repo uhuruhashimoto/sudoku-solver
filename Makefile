@@ -2,7 +2,7 @@
 #
 # CS 50, Summer 2021
 
-.PHONY: all valgrind clean
+.PHONY: all valgrind clean unit
 
 ############## default: make all libs and programs ##########
 all: 
@@ -13,6 +13,11 @@ all:
 valgrind: all
 	make -C common valgrind
 	make -C sudoku valgrind
+
+############## create all unit tests ##########
+unit: 
+	make -C common unit
+	make -C sudoku unit
 
 ############## clean  ##########
 clean:
