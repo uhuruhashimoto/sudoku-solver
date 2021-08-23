@@ -12,14 +12,11 @@ OBJS_CREATE = create.o
 PROG_DRIVER = sudoku
 OBJS_DRIVER = sudoku.o
 
+PROG_FUZZ = fuzztest
+OBJS_FUZZ = fuzztest.o solve.o create.o
+
 LLIBS = ../common/common.a
 
-FLAGS = #-DDEBUG
-
-CREATE_UNIT=unit_create
-SOLVE_UNIT=unit_solve
-
-$(CREATE_UNIT): FLAGS += -DUNIT_TEST_CREATE
 $(SOLVE_UNIT): FLAGS += -DUNIT_TEST_SOLVE
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS) 
@@ -35,10 +32,13 @@ create.o: ../common/board.h ../common/utilities.h .FORCE
 
 sudoku.o: solve.h create.h ../common/board.h .FORCE
 
+fuzztest.o: solve.o create.o ../common/board.h ../common/unittest.h ../common/utilities.h 
+
+$(PROG_FUZZ): $(OBJS_FUZZ) $(LLIBS)
+		$(CC) $(CFLAGS) $^ -o $@
+
 
 .PHONY: all test clean .FORCE
-
-.FORCE: 
 
 unit: unit_solve unit_create
 
@@ -55,4 +55,4 @@ clean:
 	rm -f $(PROG_SOLVE)
 	rm -f $(PROG_CREATE)
 	rm -f $(PROG_DRIVER)
-
+	rm -f $(PROG_FUZZ)

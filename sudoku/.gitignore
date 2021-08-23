@@ -4,4 +4,4 @@ create
 solve
 sudoku
 unit_*
-
+fuzztest

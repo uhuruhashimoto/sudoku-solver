@@ -4,7 +4,6 @@
  * see utilities.h for more information.
  *
  * CS50
- * Tyler Vergho
  */
 
 #include <stdio.h>
