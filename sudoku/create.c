@@ -44,7 +44,7 @@ void create(board board) {
     removed.num_spots = 0;
 
     //create board recursively
-    bool ret_value = remove_spots(board, to_remove, removed);
+    remove_spots(board, to_remove, removed);
 
     //print boardstat
     board_print(board);
