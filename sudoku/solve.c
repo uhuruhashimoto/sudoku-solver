@@ -10,15 +10,17 @@
 #include "../common/utilities.h"
 
 // solve - scans, solves, and prints board
-void solve(board puzzle) {
-    board_scan(puzzle, stdin);
+void solve(board puzzle) 
+{
+#ifndef UNIT_TEST_SOLVE
+  board_scan(puzzle, stdin);
+#endif
 
-    editable_spots_t spots = board_editable_spots(puzzle);
-    int *num_sol = malloc(sizeof(int));
-    backtrack(puzzle, spots, (const int) 1, 0, num_sol);
-    
-    board_print(puzzle);
-    free(num_sol);
+  editable_spots_t spots = board_editable_spots(puzzle);
+  int num_sol = 0;
+  backtrack(puzzle, spots, (const int) 1, 0, &num_sol);
+  
+  board_print(puzzle);
 }
 
 /** Unit tests **/
@@ -67,13 +69,15 @@ int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
   fprintf(stdout, "input board for solve:\n");
   board_print(puzzle);
 
-  solve(puzzle);
+  fprintf(stdout, "solved board:\n");
+  editable_spots_t spots = board_editable_spots(puzzle);
+  int num_sol = 0;
+  backtrack(puzzle, spots, (const int) 1, 0, &num_sol);
+  board_print(puzzle);
+  //solve(puzzle);
 
   fprintf(stdout, "SOLUTION:\n");
   board_print(solution);
-
-  fprintf(stdout, "solved board:\n");
-  board_print(puzzle);
 
   if (!compare_solutions(puzzle, solution)) {
     fclose(fp);
