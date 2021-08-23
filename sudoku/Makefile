@@ -14,38 +14,39 @@ OBJS_DRIVER = sudoku.o
 
 LLIBS = ../common/common.a
 
-# uncomment the following to turn on verbose memory logging
-TESTING= -DUNIT_TEST_CREATE #-DDEBUG
+FLAGS = #-DDEBUG
 
-CFLAGS = -Wall -pedantic -std=c11 -ggdb $(TESTING) 
+CREATE_UNIT=unit_create
+SOLVE_UNIT=unit_solve
+
+$(CREATE_UNIT): FLAGS += -DUNIT_TEST_CREATE
+$(SOLVE_UNIT): FLAGS += -DUNIT_TEST_SOLVE
+
+CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS) 
 CC = gcc
 MAKE = make
 
-all: solve create driver
+driver: sudoku.o solve.o create.o ../common/common.a
+	$(CC) $(CFLAGS) $^ -o sudoku
 
-$(PROG_SOLVE): $(OBJS_SOLVE) $(LLIBS)
-		$(CC) $(CFLAGS) $^ -o $@
+solve.o: ../common/board.h ../common/utilities.h .FORCE
 
-$(PROG_CREATE): $(OBJS_CREATE) $(LLIBS)
-		$(CC) $(CFLAGS) $^ -o $@
+create.o: ../common/board.h ../common/utilities.h .FORCE
 
-$(PROG_DRIVER): $(OBJS_DRIVER) $(LLIBS)
-		$(CC) $(CFLAGS) $^ -o $@
-
-solve.o: ../common/board.h ../common/utilities.h
-
-create.o: ../common/board.h ../common/utilities.h 
-
-sudoku.o: solve.h create.h ../common/board.h
+sudoku.o: solve.h create.h ../common/board.h .FORCE
 
 
-.PHONY: all test clean
+.PHONY: all test clean .FORCE
 
-unit_solve: solve.o $(LLIBS)
-	$(CC) $(CFLAGS) -DUNITTEST $^ -o unit_solve
+.FORCE: 
+
+unit: unit_solve unit_create
+
+unit_solve: solve.o $(LLIBS) 
+	$(CC) $(CFLAGS) $^ -o unit_solve
 
 unit_create: create.o $(LLIBS)
-	$(CC) $(CFLAGS) -DUNITTEST $^ -o unit_create
+	$(CC) $(CFLAGS) $^ -o unit_create
 
 
 clean:
