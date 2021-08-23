@@ -15,7 +15,7 @@ OBJS_DRIVER = sudoku.o
 LLIBS = ../common/common.a
 
 # uncomment the following to turn on verbose memory logging
-TESTING= -DUNIT_TEST_CREATE #-DDEBUG
+TESTING= -DUNIT_TEST_SOLVE -DUNIT_TEST_CREATE #-DDEBUG
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(TESTING) 
 CC = gcc
