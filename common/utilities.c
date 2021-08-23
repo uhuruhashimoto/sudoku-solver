@@ -102,7 +102,6 @@ bool backtrack(board board, editable_spots_t editable_spots, const int max_solut
 }
 
 /** Unit tests **/
-
 #ifdef UNIT_TEST_UTIL
 #include <stdio.h>
 #include "unittest.h"
@@ -202,4 +201,6 @@ int test_max_solutions(void)
   return TEST_RESULT;
 }
 
-#endif // UNIT_TEST
+#endif // UNIT_TEST_UTIL
+
+
