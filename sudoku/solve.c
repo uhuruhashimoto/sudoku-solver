@@ -12,17 +12,18 @@
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
+  /*
 #ifndef UNIT_TEST_SOLVE
   board_scan(puzzle, stdin);
-#endif
+#endif*/
 
   editable_spots_t spots = board_editable_spots(puzzle);
   int num_sol = 0;
+  
   if (!backtrack(puzzle, spots, (const int) 1, 0, &num_sol)) {
     fprintf(stderr, "Error: invalid or unsolveable board.\n");
   }
-  
-  board_print(puzzle);
+  editable_spots_delete(spots);
 }
 
 /** Unit tests **/
