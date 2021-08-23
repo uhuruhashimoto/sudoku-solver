@@ -12,10 +12,13 @@ OBJS_CREATE = create.o
 PROG_DRIVER = sudoku
 OBJS_DRIVER = sudoku.o
 
+PROG_FUZZ = fuzztest
+OBJS_FUZZ = fuzztest.o solve.o create.o
+
 LLIBS = ../common/common.a
 
 # uncomment the following to turn on verbose memory logging
-TESTING= -DUNIT_TEST_SOLVE -DUNIT_TEST_CREATE #-DDEBUG
+TESTING= #-DUNIT_TEST_SOLVE -DUNIT_TEST_CREATE #-DDEBUG
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(TESTING) 
 CC = gcc
@@ -32,12 +35,16 @@ $(PROG_CREATE): $(OBJS_CREATE) $(LLIBS)
 $(PROG_DRIVER): $(OBJS_DRIVER) $(LLIBS)
 		$(CC) $(CFLAGS) $^ -o $@
 
+$(PROG_FUZZ): $(OBJS_FUZZ) $(LLIBS)
+		$(CC) $(CFLAGS) $^ -o $@
+
 solve.o: ../common/board.h ../common/utilities.h
 
 create.o: ../common/board.h ../common/utilities.h 
 
 sudoku.o: solve.h create.h ../common/board.h
 
+fuzztest.o: solve.o create.o ../common/board.h ../common/unittest.h ../common/utilities.h 
 
 .PHONY: all test clean
 
