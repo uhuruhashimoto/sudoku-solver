@@ -27,16 +27,23 @@ void solve(board puzzle) {
 #include <time.h>
 #include "../common/unittest.h"
 
-int test_solve(void);
+//tests
+int test_solve(board board, char *filepath, char *solutionpath);
+
+//helpers
+static bool compare_solutions(board a, board b);
+static void zero_board(board board);
 
 
 int main()
 {
   srand ( time(NULL) );
+  board unsolved;
+  board solution;
   int failed = 0;
-  failed += test_create();
+  failed += test_create(unsolved, solution, "test.txt", "solution.txt");
 
-  if (failed) {
+  if (failed > 0) {
     printf("FAIL %d test cases\n", failed);
     return failed;
   } else {
@@ -45,13 +52,57 @@ int main()
   }
 }
 
-int test_solve(void)
+int test_solve(board board, board sol; char *filepath, char *solutionpath)
 {
   START_TEST_CASE("solve puzzle");
+    
+  FILE *fp = fopen(filepath, "r");
+  FILE *solfp = fopen(solutionpath, "r");
+  if (fp == NULL || solfp == NULL) {
+      return 1;
+  }
+  board_scan(board, fp);
+  board_scan(sol, solfp);
 
-  //solve things here
+  fprintf(stdout, "input board for solve:\n");
+  board_print(board);
+
+  solve(board);
+
+  fprintf(stdout, "SOLUTION:\n");
+  board_print(sol);
+
+  fprintf(stdout, "solved board:\n");
+  board_print(board);
+
+  if (!compare_solutions(board, sol)) {
+    fclose(fp);
+    fclose(solfp);
+    return 1;
+  }
+  
+  fclose(fp);
+  fclose(solfp);
+  END_TEST_CASE;
   
   return TEST_RESULT;
+}
+
+static void zero_board(board board) {
+  for (int i = 0; i < 9; i++) {
+      for (int j = 0; j < 9; j++) {
+          board[i][j] = 0;
+      }
+  }
+}
+
+static bool compare_solutions(board a, board b) 
+{
+  for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            a[i][j] == b[i][j] ? continue : return false;
+        }
+    }
 }
 
 #endif // UNIT_TEST_SOLVE
