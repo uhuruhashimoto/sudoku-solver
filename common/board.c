@@ -224,7 +224,7 @@ void editable_spots_delete(editable_spots_t editable_spots)
 #include "unittest.h"
 
 
-int test_new_board(board board);
+int test_initialize_board(board board);
 int test_print_board(board board);
 int test_scan_board(board board);
 int test_editable_spots(board board);
@@ -235,19 +235,16 @@ int test_board_complete(board board, char *filepath);
 
 // comment and uncomment tests as needed
 int main(){
+
     board new;
 
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            new[i][j] = 0;
-        }
-    }
+
     int failures = 0;
-    // failures += test_new_board(new);
-    // failures += test_print_board(new);
+    failures += test_initialize_board(new);
+    failures += test_print_board(new);
     failures += test_scan_board(new);
-    // failures += test_editable_spots(new);
-    // failures += test_board_get(new);
+    failures += test_editable_spots(new);
+    failures += test_board_get(new);
     failures += test_board_valid(new, "test_board.txt");
     failures += test_board_complete(new, "test_board.txt");
     printf("FAIL %d test cases\n", failures);
@@ -255,20 +252,20 @@ int main(){
 
 }
 
-int test_new_board(board board)
+int test_initialize_board(board board)
 {
-    // START_TEST_CASE("newboard");
-    // board* new = board_new();
+    START_TEST_CASE("initialize board");
+    board_initialize(board);
 
-    // EXPECT(new != NULL);
+    EXPECT(board[2][4] == 0);
 
-    // END_TEST_CASE;
+    END_TEST_CASE;
     return 0;
 }
 
 int test_print_board(board board)
 {
-    START_TEST_CASE("printboard");
+    START_TEST_CASE("print board");
 
     board_print(board);
 
@@ -278,7 +275,7 @@ int test_print_board(board board)
 
 int test_scan_board(board board)
 {
-    START_TEST_CASE("scanboard");
+    START_TEST_CASE("scan board");
     board_scan(board, stdin);
 
     board_print(board);
@@ -303,7 +300,7 @@ int test_editable_spots(board board)
 }
 
 int test_board_get(board board) {
-    START_TEST_CASE("boardget");
+    START_TEST_CASE("board get");
     printf("input board for board_get:\n");
     board_scan(board, stdin);
 
@@ -315,7 +312,7 @@ int test_board_get(board board) {
 
 // TODO: unit test with fixed coords to confirm validity 
 int test_board_valid(board board, char *filepath) {
-    START_TEST_CASE("boardvalid");
+    START_TEST_CASE("board valid");
     
     FILE *fp = fopen(filepath, "r");
     if (fp == NULL) {
