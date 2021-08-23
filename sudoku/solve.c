@@ -68,6 +68,7 @@ int main()
 
 int test_invalid(board puzzle, char *filepath) 
 {
+  START_TEST_CASE("invalid");
   FILE *fp = fopen(filepath, "r");
   if (fp == NULL) return 1;
   board_scan(puzzle, fp);
@@ -79,18 +80,15 @@ int test_invalid(board puzzle, char *filepath)
   solve(puzzle);
 
   //if backtrack is false, then board is returned in original state
-  if (!compare_solutions(puzzle, copy)) {
-    fclose(fp);
-    return 1;
-  } 
+  EXPECT(compare_solutions(puzzle, copy));
 
-  fprintf(stdout, "Invalid board test successful.\n\n");
   fclose(fp);
-  return 0;
+  return TEST_RESULT;
 }
 
 int test_unsolveable(board puzzle, char *filepath) 
 {
+  START_TEST_CASE("unsolveable");
   FILE *fp = fopen(filepath, "r");
   if (fp == NULL) return 1;
   board_scan(puzzle, fp);
@@ -102,18 +100,15 @@ int test_unsolveable(board puzzle, char *filepath)
   solve(puzzle);
 
   //if backtrack is false, then board is returned in original state
-  if (!compare_solutions(puzzle, copy)) {
-    fclose(fp);
-    return 1;
-  } 
+  EXPECT(compare_solutions(puzzle, copy));
 
-  fprintf(stdout, "Unsolveable board test successful.\n\n");
   fclose(fp);
-  return 0;
+  return TEST_RESULT;
 }
 
 int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
 {   
+  START_TEST_CASE("solve");
   FILE *fp = fopen(filepath, "r");
   FILE *solfp = fopen(solutionpath, "r");
   if (fp == NULL || solfp == NULL) {
@@ -131,15 +126,11 @@ int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
   fprintf(stdout, "TEST SOLUTION:\n");
   board_print(solution);
 
-  if (!compare_solutions(puzzle, solution)) {
-    fclose(fp);
-    fclose(solfp);
-    return 1;
-  }
-  
+  EXPECT(compare_solutions(puzzle, solution));
+
   fclose(fp);
   fclose(solfp);
-  return 0;
+  return TEST_RESULT;
 }
 
 static void copy_board(board copy, board puzzle) {
