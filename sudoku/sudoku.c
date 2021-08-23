@@ -33,7 +33,7 @@ int main(const int argc, const char *argv[])
     board board;
     board_initialize(board);
 
-    if (strcmp(argv[1], "solve")) {
+    if (strcmp(argv[1], "solve") == 0) {
         solve(board);
     }
     else {

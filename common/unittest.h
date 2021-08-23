@@ -56,6 +56,8 @@
 #ifndef __UNITTEST_H
 #define __UNITTEST_H
 
+typedef int make_compiler_quiet;
+
 // each test should start by setting the result count to zero
 #define START_TEST_CASE(name) int _failures=0; char *_testname = (name);
 

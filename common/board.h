@@ -89,5 +89,11 @@ bool is_complete(board board);
  */
 void editable_spots_delete(editable_spots_t editable_spots); 
 
+/**************** copy_board ****************/
+/* returns: void 
+ * copies a board from original to copy
+ * 
+ */
+void copy_board(board original, board copy);
 
 #endif // __BOARD_H
