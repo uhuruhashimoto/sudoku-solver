@@ -33,7 +33,7 @@ void create(board board) {
     //solve
     backtrack(board, spots, 1, 0, &num_solutions);
     editable_spots_delete(spots);
-    
+
     //initialize data structures for recursive loop
     //create and shuffle to_remove (all slots in board)
     int to_remove[81][2];
@@ -45,7 +45,6 @@ void create(board board) {
 
     //create board recursively
     bool ret_value = remove_spots(board, to_remove, removed);
-    printf(ret_value ? "true\n" : "false\n");
 
     //print boardstat
     board_print(board);
@@ -58,7 +57,6 @@ static bool remove_spots(board puzzle, int to_remove[81][2], spots_t removed)
     if (removed.num_spots >= 41) {
         return false;
     }
-    printf("num spots removed: %d\n", removed.num_spots);
 
     // look through every spot in board
     for (int i = 0; i < 81; i++) {
@@ -92,7 +90,6 @@ static bool remove_spots(board puzzle, int to_remove[81][2], spots_t removed)
             removed.coords[length - 1][1] = 0;
             removed.coords[length - 1][2] = 0;
             removed.num_spots--;
-            fprintf(stdout, "removed spots is decremented from %d to %d\n", removed.num_spots+1, removed.num_spots);
 
         }
         else { // already removed, try next spot 
