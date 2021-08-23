@@ -18,7 +18,9 @@ void solve(board puzzle)
 
   editable_spots_t spots = board_editable_spots(puzzle);
   int num_sol = 0;
-  backtrack(puzzle, spots, (const int) 1, 0, &num_sol);
+  if (!backtrack(puzzle, spots, (const int) 1, 0, &num_sol)) {
+    fprintf(stderr, "Error: invalid or unsolveable board.\n");
+  }
   
   board_print(puzzle);
 }
@@ -30,22 +32,30 @@ void solve(board puzzle)
 
 //tests
 int test_solve(board puzzle, board sol, char *filepath, char *solutionpath);
+int test_invalid(board puzzle, char *filepath);
+int test_unsolveable(board puzzle, char *filepath);
 
 //helpers
 static bool compare_solutions(board a, board b);
 static void zero_board(board puzzle);
-
+static void copy_board(board copy, board puzzle);
 
 int main()
 {
   board unsolved;
   board solution;
+  board invalid;
+  board unsolveable;
   int failed = 0;
 
   zero_board(unsolved);
   zero_board(solution);
+  zero_board(invalid);
+  zero_board(unsolveable);
 
   failed += test_solve(unsolved, solution, "test.txt", "solution.txt");
+  failed += test_invalid(invalid, "invalid.txt");
+  failed += test_unsolveable(unsolveable, "unsolveable.txt");
 
   if (failed > 0) {
     printf("FAIL %d test cases\n", failed);
@@ -54,6 +64,52 @@ int main()
     printf("PASS all test cases\n");
     return 0;
   }
+}
+
+int test_invalid(board puzzle, char *filepath) 
+{
+  FILE *fp = fopen(filepath, "r");
+  if (fp == NULL) return 1;
+  board_scan(puzzle, fp);
+
+  board copy; 
+  copy_board(copy, puzzle);
+  
+  fprintf(stdout, "Testing invalid board:\n");
+  solve(puzzle);
+
+  //if backtrack is false, then board is returned in original state
+  if (!compare_solutions(puzzle, copy)) {
+    fclose(fp);
+    return 1;
+  } 
+
+  fprintf(stdout, "Invalid board test successful.\n\n");
+  fclose(fp);
+  return 0;
+}
+
+int test_unsolveable(board puzzle, char *filepath) 
+{
+  FILE *fp = fopen(filepath, "r");
+  if (fp == NULL) return 1;
+  board_scan(puzzle, fp);
+
+  board copy; 
+  copy_board(copy, puzzle);
+  
+  fprintf(stdout, "Testing unsolveable board:\n");
+  solve(puzzle);
+
+  //if backtrack is false, then board is returned in original state
+  if (!compare_solutions(puzzle, copy)) {
+    fclose(fp);
+    return 1;
+  } 
+
+  fprintf(stdout, "Unsolveable board test successful.\n\n");
+  fclose(fp);
+  return 0;
 }
 
 int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
@@ -66,17 +122,13 @@ int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
   board_scan(puzzle, fp);
   board_scan(solution, solfp);
 
-  fprintf(stdout, "input board for solve:\n");
+  fprintf(stdout, "Input board for solve:\n");
   board_print(puzzle);
 
-  fprintf(stdout, "solved board:\n");
-  editable_spots_t spots = board_editable_spots(puzzle);
-  int num_sol = 0;
-  backtrack(puzzle, spots, (const int) 1, 0, &num_sol);
-  board_print(puzzle);
-  //solve(puzzle);
+  fprintf(stdout, "Generating solution...\n");
+  solve(puzzle);
 
-  fprintf(stdout, "SOLUTION:\n");
+  fprintf(stdout, "TEST SOLUTION:\n");
   board_print(solution);
 
   if (!compare_solutions(puzzle, solution)) {
@@ -90,11 +142,19 @@ int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
   return 0;
 }
 
+static void copy_board(board copy, board puzzle) {
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+        copy[i][j] = puzzle[i][j];
+    }
+  }
+}
+
 static void zero_board(board puzzle) {
   for (int i = 0; i < 9; i++) {
-      for (int j = 0; j < 9; j++) {
-          puzzle[i][j] = 0;
-      }
+    for (int j = 0; j < 9; j++) {
+        puzzle[i][j] = 0;
+    }
   }
 }
 
@@ -102,7 +162,7 @@ static bool compare_solutions(board a, board b)
 {
   for (int i = 0; i < 9; i++) {
     for (int j = 0; j < 9; j++) {
-        if (a[i][j] != b[i][j]) return false;
+      if (a[i][j] != b[i][j]) return false;
     }
   }
   return true;
