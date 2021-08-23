@@ -1,11 +1,10 @@
 /* 
  * board.c
  *
- * Description: 
+ * Description: the implementation for an API to interact with a board, a 9x9 array of integers
  * 
  * 
  *
- * CS 50, Team: Kumquat
  */
 
 #include <stdio.h>

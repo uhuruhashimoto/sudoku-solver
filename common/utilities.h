@@ -1,7 +1,7 @@
 /* 
  * utilities.h - header file for sudoku utilities module
  *
- * CS50
+ * 
  */
 
 #ifndef __UTILITIES_H

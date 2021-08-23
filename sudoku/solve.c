@@ -2,7 +2,7 @@
 * solve.c - module that scans, solves, and prints a board
 * contains a helper function that returns a solved board
 *
-* Uhuru
+* 
 */
 #include <stdio.h>
 #include <stdlib.h>

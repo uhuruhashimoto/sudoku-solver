@@ -1,11 +1,9 @@
 /* 
  * board.h - header file for board module
  *
- * Description: 
+ * Description: the interface for an API to interact with a board, a 9x9 array of integers
  * 
  * 
- *
- * CS 50, Team: Kumquat
  */
 
 #ifndef __BOARD_H
