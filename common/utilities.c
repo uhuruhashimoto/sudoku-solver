@@ -106,6 +106,7 @@ bool backtrack(board board, editable_spots_t editable_spots, const int max_solut
 #include "unittest.h"
 
 int test_shuffle(void);
+int test_shuffle_twod(void);
 int test_fill_diagonals(void);
 int test_backtrack(void);
 int test_max_solutions(void);
@@ -115,6 +116,7 @@ int main()
   srand ( time(NULL) );
   int failed = 0;
   failed += test_shuffle();
+  failed += test_shuffle_twod();
   failed += test_fill_diagonals();
   failed += test_backtrack();
   failed += test_max_solutions();
@@ -138,7 +140,31 @@ int test_shuffle(void)
     printf("%d ", row[i]);
   }
   printf("\n");
-  EXPECT(row[0] != row_og[0] || row[1] != row_og[1]);
+  EXPECT(row[0] != row_og[0] || row[1] != row_og[1] || row[2] != row_og[2]);
+  END_TEST_CASE;
+  return TEST_RESULT;
+}
+
+int test_shuffle_twod(void)
+{
+  START_TEST_CASE("shuffle twod array");
+  int array_og[9][2];
+  int array[9][2];
+  int num = 0;
+  for (int i = 0; i < 9; i++) {
+    array[i][0] = num;
+    array_og[i][0] = num;
+
+    array[i][1] = num;
+    array_og[i][1] = num;
+    num++;
+  }
+  shuffle_arr_twod(array, 9);
+  for (int i = 0; i < 9; i++) {
+    printf("[%d, %d] ", array[i][0], array[i][1]);
+  }
+  printf("\n");
+  EXPECT(array[0][0] != array_og[0][0] || array[1][0] != array_og[1][0] || array[2][0] != array_og[2][0]);
   END_TEST_CASE;
   return TEST_RESULT;
 }
@@ -154,6 +180,7 @@ int test_fill_diagonals(void)
   }
   fill_diagonals(board);
   // board_print(board);
+  EXPECT(is_valid(board));
   END_TEST_CASE;
   return TEST_RESULT;
 }
@@ -168,15 +195,49 @@ int test_backtrack(void)
   //   }
   // }
   // fill_diagonals(board);
-  FILE *fp = fopen("./test_board_2.txt", "r");
+  
+  // basic test with solvable board
+  FILE *fp = fopen("solvable.txt", "r");
   board_scan(board, fp);
   fclose(fp);
   editable_spots_t spots = board_editable_spots(board);
   int num_solutions = 0;
   bool solved = backtrack(board, spots, 1, 0, &num_solutions);
-  printf("num solutions: %d\n", num_solutions);
-  EXPECT(solved);
   board_print(board);
+  printf("\n");
+
+  EXPECT(solved);
+  EXPECT(num_solutions == 1);
+  editable_spots_delete(spots);
+
+  // see if it can solve a puzzle with multiple solutions
+  fp = fopen("mult_sols.txt", "r");
+  board_scan(board, fp);
+  fclose(fp);
+  spots = board_editable_spots(board);
+  num_solutions = 0;
+  solved = backtrack(board, spots, 1, 0, &num_solutions);
+  board_print(board);
+  printf("\n");
+
+  EXPECT(solved);
+  EXPECT(num_solutions == 1);
+  editable_spots_delete(spots);
+
+  // return num_solutions 0 for no solutions 
+  fp = fopen("not_solvable.txt", "r");
+  board_scan(board, fp);
+  fclose(fp);
+  spots = board_editable_spots(board);
+  num_solutions = 0;
+  solved = backtrack(board, spots, 1, 0, &num_solutions);
+  board_print(board);
+  printf("\n");
+
+  EXPECT(!solved);
+  EXPECT(num_solutions == 0);
+  editable_spots_delete(spots);
+
   END_TEST_CASE;
   return TEST_RESULT;
 }
