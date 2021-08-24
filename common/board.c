@@ -28,7 +28,7 @@ void board_initialize(board board)
 {
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            board[i][j] = 0;
+            board[i][j] = 0; // set all to 0
         }
     }
 }
@@ -94,6 +94,7 @@ void board_scan(board board, FILE* fp)
 /**************** board_editable_spots ****************/
 editable_spots_t board_editable_spots(board board)
 {
+    // need variable to keep track of how much space to allocate
     int length = 0;
 
     for(int i = 0; i < 9; i++){
@@ -112,7 +113,7 @@ editable_spots_t board_editable_spots(board board)
     int index = 0;
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
-            if(board[i][j] == 0){
+            if(board[i][j] == 0){ // can edit this spot, is empty
                 editable_spots.coords[index][0] = i;
                 editable_spots.coords[index][1] = j;
                 index++; 
@@ -122,6 +123,7 @@ editable_spots_t board_editable_spots(board board)
     return editable_spots;
 }
 
+/**************** is_valid ****************/
 bool is_valid(board board) 
 {
     // check rows 
@@ -188,6 +190,7 @@ static bool unique_and_valid(int value, int numbers[9], int *index)
 }
 
 // helper for is_valid
+// returns true if num is in array, else false
 static bool is_in(int num, int array[9])
 {
     for (int i = 0; i < 9; i++) {
@@ -198,6 +201,7 @@ static bool is_in(int num, int array[9])
     return false;
 }
 
+/**************** is_complete ****************/
 bool is_complete(board board)
 {
     for (int i = 0; i < 9; i++) {
@@ -207,14 +211,21 @@ bool is_complete(board board)
             }
         }
     }
+    // no spots are empty
     return true;
 }
 
+
+/**************** editable_spots_delete ****************/
 void editable_spots_delete(editable_spots_t editable_spots) 
 {
+    // free allocated space
+    // must be called if board_editable_spots is called 
     free(editable_spots.coords);
 }
 
+
+/**************** copy_board ****************/
 void copy_board(board original, board copy)
 {
     for (int i = 0; i < 9; i++) {

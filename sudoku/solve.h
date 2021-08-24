@@ -17,6 +17,18 @@
 #include "../common/board.h"
 
 
+/**************** solve ****************/
+/* Given an initialized board, 
+ * solve the board if possible and print it 
+ * to stdout 
+ * 
+ * We return: 
+ *  void, but the board if solvable is solved 
+ * 
+ * Caller is responsible for:
+ *  calling board_initialize before passing board 
+ *  
+ */
 void solve(board board);
 
 

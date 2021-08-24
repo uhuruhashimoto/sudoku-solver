@@ -9,24 +9,32 @@
 #include "../common/board.h"
 #include "../common/utilities.h"
 
-int NO_SOLUTION = 1;
+const int NO_SOLUTION = 1;
 
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
+	// if not doing unit tests, need to get 
+	// board from stdin 
 	#ifndef UNIT_TEST_SOLVE
 		#ifndef UNIT_TEST_FUZZ
-			board_scan(puzzle, stdin);
+			board_scan(puzzle, stdin); 
 		#endif
 	#endif
 
 	editable_spots_t spots = board_editable_spots(puzzle);
 	int num_sol = 0;
 	
+	// solve the puzzle with backtrack 
 	if (!backtrack(puzzle, spots, (const int) 1, 0, &num_sol)) {
 		fprintf(stderr, "Error: invalid or unsolveable board.\n");
+		exit(NO_SOLUTION);
 	}
+  	// free memory
 	editable_spots_delete(spots);
+
+	// now board should be in solved state
+	board_print(puzzle);
 }
 
 /** Unit tests **/

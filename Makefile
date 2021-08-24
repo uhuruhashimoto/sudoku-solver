@@ -9,11 +9,6 @@ all:
 	make -C common
 	make -C sudoku
 
-############## valgrind all programs ##########
-valgrind: all
-	make -C common valgrind
-	make -C sudoku valgrind
-
 ############## create all unit tests ##########
 unit: 
 	make -C common
