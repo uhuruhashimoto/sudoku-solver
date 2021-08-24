@@ -12,6 +12,9 @@ OBJS_CREATE = create.o
 PROG_DRIVER = sudoku
 OBJS_DRIVER = sudoku.o
 
+PROG_FUZZ = fuzztest
+OBJS_FUZZ = fuzztest.o solve.o create.o
+
 LLIBS = ../common/common.a
 
 FLAGS = #-DDEBUG
@@ -35,6 +38,8 @@ create.o: ../common/board.h ../common/utilities.h .FORCE
 
 sudoku.o: solve.h create.h ../common/board.h .FORCE
 
+fuzztest.o: solve.o create.o ../common/board.h ../common/unittest.h ../common/utilities.h 
+
 
 .PHONY: all test clean .FORCE
 
@@ -48,6 +53,9 @@ unit_solve: solve.o $(LLIBS)
 unit_create: create.o $(LLIBS)
 	$(CC) $(CFLAGS) $^ -o unit_create
 
+$(PROG_FUZZ): $(OBJS_FUZZ) $(LLIBS)
+	$(CC) $(CFLAGS) $^ -o $@
+
 
 clean:
 	rm -rf *.dSYM  # MacOS debugger info
@@ -55,3 +63,4 @@ clean:
 	rm -f $(PROG_SOLVE)
 	rm -f $(PROG_CREATE)
 	rm -f $(PROG_DRIVER)
+	rm -f $(PROG_FUZZ)
