@@ -215,7 +215,14 @@ void editable_spots_delete(editable_spots_t editable_spots)
     free(editable_spots.coords);
 }
 
-
+void copy_board(board original, board copy)
+{
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            copy[i][j] = original[i][j];
+        }
+    }
+}
 
 
 #ifdef UNIT_TEST_BOARD
