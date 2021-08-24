@@ -12,9 +12,15 @@
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
+<<<<<<< HEAD
 #ifndef UNIT_TEST_SOLVE
   board_scan(puzzle, stdin);
 #endif
+=======
+  #ifndef UNIT_TEST_SOLVE
+    board_scan(puzzle, stdin);
+  #endif
+>>>>>>> 1590657690004cc096004cf4f9d894db9cf73fb2
 
   editable_spots_t spots = board_editable_spots(puzzle);
   int num_sol = 0;
@@ -38,7 +44,6 @@ int test_unsolveable(board puzzle, char *filepath);
 //helpers
 static bool compare_solutions(board a, board b);
 static void zero_board(board puzzle);
-static void copy_board(board copy, board puzzle);
 
 int main()
 {
@@ -133,14 +138,6 @@ int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
   fclose(fp);
   fclose(solfp);
   return TEST_RESULT;
-}
-
-static void copy_board(board copy, board puzzle) {
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-        copy[i][j] = puzzle[i][j];
-    }
-  }
 }
 
 static void zero_board(board puzzle) {
