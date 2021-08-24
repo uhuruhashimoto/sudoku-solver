@@ -18,3 +18,8 @@ To clean up, run `make clean`.
 To call the unit tests for board.c, run `./unit_board`
 
 To call the unit tests for utilitiies.c, run `./unit_utilities`
+
+### Credits
+The following files were utilized from CS50 code:
+* file.c / file.h
+* unittest.h
