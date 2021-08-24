@@ -24,6 +24,7 @@ SOLVE_UNIT=unit_solve
 
 $(CREATE_UNIT): FLAGS += -DUNIT_TEST_CREATE
 $(SOLVE_UNIT): FLAGS += -DUNIT_TEST_SOLVE
+$(PROG_FUZZ): FLAGS += -DUNIT_TEST_FUZZ
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS) 
 CC = gcc
@@ -38,7 +39,7 @@ create.o: ../common/board.h ../common/utilities.h .FORCE
 
 sudoku.o: solve.h create.h ../common/board.h .FORCE
 
-fuzztest.o: solve.o create.o ../common/board.h ../common/unittest.h ../common/utilities.h 
+fuzztest.o: solve.o create.o ../common/board.h ../common/unittest.h ../common/utilities.h .FORCE
 
 
 .PHONY: all test clean .FORCE

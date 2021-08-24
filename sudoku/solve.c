@@ -14,7 +14,9 @@ void solve(board puzzle)
 {
   
   #ifndef UNIT_TEST_SOLVE
-    board_scan(puzzle, stdin);
+    #ifndef UNIT_TEST_FUZZ
+      board_scan(puzzle, stdin);
+    #endif
   #endif
 
   editable_spots_t spots = board_editable_spots(puzzle);
