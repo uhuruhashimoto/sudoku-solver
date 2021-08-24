@@ -9,6 +9,8 @@
 #include "../common/board.h"
 #include "../common/utilities.h"
 
+int NO_SOLUTION = 1;
+
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
