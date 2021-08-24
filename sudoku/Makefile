@@ -17,6 +17,12 @@ OBJS_FUZZ = fuzztest.o solve.o create.o
 
 LLIBS = ../common/common.a
 
+FLAGS = #-DDEBUG
+
+CREATE_UNIT=unit_create
+SOLVE_UNIT=unit_solve
+
+$(CREATE_UNIT): FLAGS += -DUNIT_TEST_CREATE
 $(SOLVE_UNIT): FLAGS += -DUNIT_TEST_SOLVE
 
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS) 
@@ -34,11 +40,10 @@ sudoku.o: solve.h create.h ../common/board.h .FORCE
 
 fuzztest.o: solve.o create.o ../common/board.h ../common/unittest.h ../common/utilities.h 
 
-$(PROG_FUZZ): $(OBJS_FUZZ) $(LLIBS)
-		$(CC) $(CFLAGS) $^ -o $@
-
 
 .PHONY: all test clean .FORCE
+
+.FORCE: 
 
 unit: unit_solve unit_create
 
@@ -47,6 +52,9 @@ unit_solve: solve.o $(LLIBS)
 
 unit_create: create.o $(LLIBS)
 	$(CC) $(CFLAGS) $^ -o unit_create
+
+$(PROG_FUZZ): $(OBJS_FUZZ) $(LLIBS)
+	$(CC) $(CFLAGS) $^ -o $@
 
 
 clean:
