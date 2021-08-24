@@ -132,7 +132,9 @@ static void initialize_to_remove(int to_remove[81][2])
 #include "../common/unittest.h"
 
 int test_create(void);
-
+//helpers
+static bool meets_parameters(board puzzle);
+static bool has_one_solution(board puzzle);
 
 int main()
 {
@@ -153,10 +155,37 @@ int test_create(void)
 {
   START_TEST_CASE("create puzzle");
 
-  board board;
-  create(board);
+  board puzzle;
+  create(puzzle);
+
+  EXPECT(meets_parameters(puzzle));
+  EXPECT(has_one_solution(puzzle));
   
   return TEST_RESULT;
+}
+
+// integers 1-9; 40+ zeroes
+static bool meets_parameters(board puzzle) 
+{
+    int zero_count = 0;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (puzzle[i][j] == 0) zero_count++;
+            if (puzzle[i][j] > 9 || puzzle[i][j] < 0) return false;
+        }
+    }
+
+    if (zero_count < 40) return false;
+    return true;
+}
+
+static bool has_one_solution(board puzzle) 
+{
+    editable_spots_t spots = board_editable_spots(puzzle);
+    int num_sol = 0;
+    backtrack(puzzle, spots, (const int) 2, 0, &num_sol);
+    if (num_sol != 1) return false;
+    return true;
 }
 
 #endif // UNIT_TEST_CREATE
