@@ -12,15 +12,10 @@
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
-<<<<<<< HEAD
-#ifndef UNIT_TEST_SOLVE
-  board_scan(puzzle, stdin);
-#endif
-=======
+  
   #ifndef UNIT_TEST_SOLVE
     board_scan(puzzle, stdin);
   #endif
->>>>>>> 1590657690004cc096004cf4f9d894db9cf73fb2
 
   editable_spots_t spots = board_editable_spots(puzzle);
   int num_sol = 0;
