@@ -66,9 +66,15 @@ void board_scan(board board, FILE* fp)
 
     while(i < 9 && (row = freadlinep(fp)) != NULL){
 
-        if(strlen(row) != 18){
+        if(strlen(row) != 18) {
             free(row);
-            fprintf(stderr, "not a valid board");
+            fprintf(stderr, "not a valid board\n");
+            return;
+        }
+
+        if((strcmp(row, "%d %d %d %d %d %d %d %d %d ") != 0)){
+            free(row);
+            fprintf(stderr, "incorrect format of input. should have 9 numbers with spaces after each number.\n");
             return;
         }
 
