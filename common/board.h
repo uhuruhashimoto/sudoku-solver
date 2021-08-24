@@ -22,29 +22,38 @@ typedef struct editable_spots {
   int num_spots; 
 } editable_spots_t;
 
-/**************** board_new ****************/
+/**************** board_initialize ****************/
 /* returns void
- * sets all elements in array to 0 
+ * 
+ * sets all elements in the board to 0 
  */
 void board_initialize(board board);
 
 /**************** board_insert ****************/
-/* inserts a value into a specifc cell of the board
- *
+/* returns void 
  * 
+ * sets an element at the given 
+ * row, col location to the given value
  */
 void board_insert(board board, int row, int column, int value);
 
 /**************** board_print ****************/
-/* prints out a given board
- * 
- *        
+/* returns void 
+ *
+ * prints a given board
+ * to stdout in the format of 
+ * 9 numbers per line, with a space between 
+ * each
  */
 void board_print(board board);
 
 /**************** board_scan ****************/
-/* scans a board from stdin
- * returns: a pointer to a scanned-in board
+/* returns void
+ * 
+ * scans 9 lines of input (or until EOF) from 
+ * stdin and reads them into the given board struct.
+ * expects input of the form 9 numbers per line, 
+ * separated by a single space. 
  * 
  */
 void board_scan(board board, FILE* fp);
@@ -54,20 +63,26 @@ void board_scan(board board, FILE* fp);
 /* returns: a value at the cell indicated by
  * row and column value
  * 
+ * expects: row and column are in bounds for the 9x9 array
  */
 int board_get(board board, int row, int column);
 
 /**************** board_editable_spots ****************/
 /* returns: an array of coordinates that are editable
- * or marked as "zero"
+ * (marked as "zero" in the board)
  * 
+ * caller is responsible for later calling 
+ * ediable_spots_delete()
  */
 editable_spots_t board_editable_spots(board board);
 
 /**************** is_valid ****************/
 /* returns: false if the board breaks any rules,
  * true if the board is valid
- * 
+ *
+ * rules include: all numbers are from 1-9, 
+ * no number can appear more than once in any row,
+ * column, or 3x3 block
  */
 bool is_valid(board board);
 
@@ -76,6 +91,7 @@ bool is_valid(board board);
 /* returns: true if board has all spots filled in,
  * false if still empty spots left
  * 
+ * empty spots are defined by a zero 
  */
 bool is_complete(board board);
 

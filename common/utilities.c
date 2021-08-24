@@ -16,7 +16,7 @@ void shuffle_arr(int *arr, int n)
 {
     int i, j, temp;
     for (i = n - 1; i > 0; i--) {
-        j = rand() % (i + 1);
+        j = rand() % (i + 1); // switch with a random element 
         temp = arr[j];
         arr[j] = arr[i];
         arr[i] = temp;
@@ -45,8 +45,9 @@ void fill_diagonals(board board)
     int quad_one[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     shuffle_arr(quad_one, 9);
     int i = 0;
-    for (int x = 0; x < 3; x++) {
+    for (int x = 0; x < 3; x++) { 
         for (int y = 0; y < 3; y++) {
+			// fill each cell with next element in shuffled array
             board_insert(board, x, y, quad_one[i]);
             i++;
         }
@@ -77,26 +78,28 @@ void fill_diagonals(board board)
 
 bool backtrack(board board, editable_spots_t editable_spots, const int max_solutions, int cur_index, int *num_solutions)
 {
-    if (cur_index >= editable_spots.num_spots) {
+    if (cur_index >= editable_spots.num_spots) { // reached end of spots to try
         return false;
     }
 
-    for (int i = 1; i <= 9; i++) {
+    for (int i = 1; i <= 9; i++) { // try every possible value 
         board_insert(board, editable_spots.coords[cur_index][0], editable_spots.coords[cur_index][1], i);
         if (is_valid(board)) {
-            if (is_complete(board)) {
+            if (is_complete(board)) { // found a solution
                 (*num_solutions)++;
-                if (*num_solutions >= max_solutions) {
+                if (*num_solutions >= max_solutions) { // stop searching 
                     return true;
                 }
             }
 
+			// if haven't hit max number of solutions, continue filling in numbers
             if (backtrack(board, editable_spots, max_solutions, cur_index + 1, num_solutions)) {
                 return true;
             }
         }
     }
 
+	// undo the last number we filled in
     board_insert(board, editable_spots.coords[cur_index][0], editable_spots.coords[cur_index][1], 0);
     return false;
 }

@@ -28,6 +28,7 @@ int main(const int argc, const char *argv[])
         exit(validated);
     }
 
+    // will maintain this variable for as long as program runs 
     board board;
     board_initialize(board);
 
@@ -43,7 +44,7 @@ int main(const int argc, const char *argv[])
 
 int validate_arguments(const int argc, const char *argv[]) 
 {
-    if (argc != 2) {
+    if (argc != 2) { // wrong number of args
         fprintf(stderr, "Usage: ./sudoku create or ./sudoku solve");
         return ERROR_NUM_ARGS;
     }
