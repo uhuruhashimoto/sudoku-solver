@@ -16,6 +16,7 @@ valgrind: all
 
 ############## create all unit tests ##########
 unit: 
+	make -C common
 	make -C common unit
 	make -C sudoku unit
 
