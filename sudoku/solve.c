@@ -9,6 +9,8 @@
 #include "../common/board.h"
 #include "../common/utilities.h"
 
+int NO_SOLUTION = 1;
+
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
@@ -22,8 +24,12 @@ void solve(board puzzle)
   
   if (!backtrack(puzzle, spots, (const int) 1, 0, &num_sol)) {
     fprintf(stderr, "Error: invalid or unsolveable board.\n");
+    exit(NO_SOLUTION);
   }
   editable_spots_delete(spots);
+
+  fprintf(stdout, "Solved board:\n");
+  board_print(puzzle);
 }
 
 /** Unit tests **/
@@ -53,7 +59,7 @@ int main()
   zero_board(invalid);
   zero_board(unsolveable);
 
-  failed += test_solve(unsolved, solution, "test/test1.txt", "test/solution1.txt");
+  failed += test_solve(unsolved, solution, "test/test.txt", "test/solution.txt");
   failed += test_solve(unsolved, solution, "test/test2.txt", "test/solution2.txt");
   failed += test_solve(unsolved, solution, "test/test3.txt", "test/solution3.txt");
   failed += test_invalid(invalid, "test/invalid.txt");
