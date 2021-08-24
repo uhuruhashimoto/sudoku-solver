@@ -38,7 +38,6 @@ int test_unsolveable(board puzzle, char *filepath);
 //helpers
 static bool compare_solutions(board a, board b);
 static void zero_board(board puzzle);
-static void copy_board(board copy, board puzzle);
 
 int main()
 {
