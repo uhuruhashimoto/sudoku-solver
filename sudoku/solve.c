@@ -12,6 +12,7 @@
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
+  
   #ifndef UNIT_TEST_SOLVE
     board_scan(puzzle, stdin);
   #endif
@@ -31,7 +32,7 @@ void solve(board puzzle)
 #include "../common/unittest.h"
 
 //tests
-int test_solve(board puzzle, board sol, char *filepath, char *solutionpath);
+int test_solve(board puzzle, board solution, char *filepath, char *solutionpath);
 int test_invalid(board puzzle, char *filepath);
 int test_unsolveable(board puzzle, char *filepath);
 
@@ -52,9 +53,11 @@ int main()
   zero_board(invalid);
   zero_board(unsolveable);
 
-  failed += test_solve(unsolved, solution, "test.txt", "solution.txt");
-  failed += test_invalid(invalid, "invalid.txt");
-  failed += test_unsolveable(unsolveable, "unsolveable.txt");
+  failed += test_solve(unsolved, solution, "test/test1.txt", "test/solution1.txt");
+  failed += test_solve(unsolved, solution, "test/test2.txt", "test/solution2.txt");
+  failed += test_solve(unsolved, solution, "test/test3.txt", "test/solution3.txt");
+  failed += test_invalid(invalid, "test/invalid.txt");
+  failed += test_unsolveable(unsolveable, "test/unsolveable.txt");
 
   if (failed > 0) {
     printf("FAIL %d test cases\n", failed);
