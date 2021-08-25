@@ -311,7 +311,7 @@ int test_editable_spots(board board)
         printf("%d, %d ", editable_spots.coords[i][0], editable_spots.coords[i][1]);
         
     }
-    
+    editable_spots_delete(editable_spots);
     END_TEST_CASE;
     return 0;
 }
