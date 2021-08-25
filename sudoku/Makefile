@@ -65,3 +65,4 @@ clean:
 	rm -f $(PROG_CREATE)
 	rm -f $(PROG_DRIVER)
 	rm -f $(PROG_FUZZ)
+	rm -f unit_*
