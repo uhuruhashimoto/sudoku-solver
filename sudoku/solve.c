@@ -34,6 +34,7 @@ void solve(board puzzle)
 	editable_spots_delete(spots);
 
 	// now board should be in solved state
+	fprintf(stdout, "Solved board:\n");
 	board_print(puzzle);
 }
 

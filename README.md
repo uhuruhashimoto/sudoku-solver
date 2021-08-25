@@ -30,11 +30,12 @@ This project is organized into two main directories: a *Common* Directory and a 
 ### Usage
 To build, run `make`.
 
+To build all unit test executables, run `make unit`
+
 To clean up, run `make clean`.
 
-To call the Sudoku Creator, run `./sudoku create`
 
-To call the Sudoku Solver, run `./sudoku solve`
+NOTE: See README's in Common and Sudoku Directories for further usage instructions.
 
 
 ### Project Work Distribution

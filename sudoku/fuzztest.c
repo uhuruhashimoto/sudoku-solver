@@ -15,12 +15,24 @@
 #include "solve.h"
 #include "../common/utilities.h"
 
-int main() {
+int main(const int argc, const char *argv[]) {
 	srand ( time(NULL) );
+
+	if (argc != 2) {
+		fprintf(stderr, "usage: ./fuzztest n\n");
+		return 1;
+	}
+	
+	int n = atoi(argv[1]);
+	if (n <= 0) {
+		fprintf(stderr, "error: n must be an integer greater than 0\n");
+		return 1;
+	}
+
 	START_TEST_CASE("create and solve boards");
 
-	// create and solve 10 boards
-	for (int i = 1; i <= 10; i++) {
+	// create and solve n boards
+	for (int i = 1; i <= n; i++) {
 		board puzzle;
 		board_initialize(puzzle);
 		create(puzzle);
