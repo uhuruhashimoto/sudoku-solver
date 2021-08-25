@@ -45,11 +45,11 @@ int main(const int argc, const char *argv[])
 int validate_arguments(const int argc, const char *argv[]) 
 {
     if (argc != 2) { // wrong number of args
-        fprintf(stderr, "Usage: ./sudoku create or ./sudoku solve");
+        fprintf(stderr, "Usage: ./sudoku create or ./sudoku solve\n");
         return ERROR_NUM_ARGS;
     }
     if (strcmp(argv[1], "create") != 0 && strcmp(argv[1], "solve") != 0) {
-        fprintf(stderr, "Argument must be either create or solve");
+        fprintf(stderr, "Argument must be either create or solve\n");
         return ERROR_ARG;
     }
     return 0;

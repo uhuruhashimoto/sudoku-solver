@@ -184,6 +184,7 @@ static bool has_one_solution(board puzzle)
     editable_spots_t spots = board_editable_spots(puzzle);
     int num_sol = 0;
     backtrack(puzzle, spots, (const int) 2, 0, &num_sol);
+    editable_spots_delete(spots);
     if (num_sol != 1) return false;
     return true;
 }
