@@ -43,7 +43,7 @@ int main() {
     board_print(puzzle);
 
     //send sudoku
-    if ((send(sockfd, &puzzle, 81, 0)) < 0) {
+    if ((send(sockfd, puzzle, 81, 0)) < 0) {
         fprintf(stderr, "Error: failed to send sudoku\n");
         close(sockfd);
         return ++status;
@@ -55,7 +55,7 @@ int main() {
         close(sockfd);
         return ++status;
     }
-    fprintf(stdout, "Recieved solution!\n");
+    fprintf(stdout, "Recieved solution:\n");
     board_print(buf);
 
     //close socket

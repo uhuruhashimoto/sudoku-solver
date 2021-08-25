@@ -20,6 +20,7 @@ int main() {
     int status = 0;
     int sockfd;
     struct sockaddr_in servaddr;
+    board buf;
 
     //create socket
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -36,12 +37,26 @@ int main() {
 	}
 
     //recieve sudoku
+    if ((recv(sockfd, &buf, 81, 0)) < 0) {
+        fprintf(stderr, "Error: failed to recieve solution\n");
+        close(sockfd);
+        return ++status;
+    }
+    fprintf(stdout, "Recieved sudoku!\n");
+    board_print(buf);
 
     //solve sudoku
-
-    //serialize
+    fprintf(stdout, "Solving sudoku...\n");
+    solve(buf);
 
     //send solution
+    fprintf(stdout, "Sending solution...\n");
+    if ((send(sockfd, buf, 81, 0)) < 0) {
+        fprintf(stderr, "Error: failed to send sudoku\n");
+        close(sockfd);
+        return ++status;
+    }
+    fprintf(stdout, "Solution sent.\n");
 
     //close socket
     fprintf(stdout, "Exiting...\n");
