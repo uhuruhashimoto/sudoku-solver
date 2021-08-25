@@ -10,16 +10,18 @@ OBJ_SERVER = server.o
 CC = gcc
 CFLAGS = -Wall -pedantic -std=c11 -ggdb
 
-all: client server solve.o create.o ../common/common.a
+all: client server 
 
-client: $(OBJ_CLIENT) create.o ../common/common.a
+client: $(OBJ_CLIENT) ../sudoku/create.o ../common/common.a
 	$(CC) $(CFLAGS) $^ -o client
 
-server: $(OBJ_SERVER) solve.o ../common/common.a
+server: $(OBJ_SERVER) ../sudoku/solve.o ../common/common.a
 	$(CC) $(CFLAGS) $^ -o server
 
-client.o: ../common/board.h ../common/utilities.h ../sudoku/create.h client.c
+client.o: ../common/board.h ../common/utilities.h ../sudoku/create.h 
 server.o: ../common/board.h ../common/utilities.h ../sudoku/solve.h 
+../sudoku/create.o: ../sudoku/create.h 
+../sudoku/solve.o: ../sudoku/solve.h 
 
 clean:
 	rm -rf *.dSYM  # MacOS debugger info

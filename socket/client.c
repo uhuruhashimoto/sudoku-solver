@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h> //for closing files
+#include <arpa/inet.h>   //inet_addr
 #include <sys/socket.h> //for sock
 #include <netinet/in.h> //for servaddr
 #include <json-c/json.h> //for serialization
@@ -32,7 +33,7 @@ int main() {
         return ++status;
     }
     servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	servaddr.sin_port = htons(PORT);
 
     if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
@@ -53,7 +54,7 @@ int main() {
     }
 
     //receive answer
-    if ((recv(sockfd, &buf, 81, 0)) < 0) {
+    if ((read(sockfd, &buf, 81)) < 0) {
         fprintf(stderr, "Error: failed to recieve solution\n");
         close(sockfd);
         return ++status;
