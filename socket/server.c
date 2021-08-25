@@ -8,11 +8,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h> //for closing files
 #include <sys/socket.h> //for sock
 #include <netinet/in.h> //for servaddr
 #include <json-c/json.h> //for serialization
 #include "../common/board.h" //board functionality
 #include "../common/utilities.h"
+#include "../sudoku/solve.h"
+#include "../sudoku/create.h"
 
 
 int main() {
