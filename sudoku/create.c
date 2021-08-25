@@ -48,6 +48,7 @@ void create(board board) {
 
     //print boardstat
     board_print(board);
+    printf("\n");
 }
 
 
