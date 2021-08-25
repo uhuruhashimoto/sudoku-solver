@@ -10,12 +10,15 @@
 #include <stdlib.h>
 #include <sys/socket.h> //for sock
 #include <netinet/in.h> //for servaddr
+#include <json-c/json.h> //for serialization
 #include "../common/board.h" //board functionality
 #include "../common/utilities.h"
 
 
 int main() {
     const int PORT = 60065;
+    board puzzle; //stores created sudoku
+    board buf; //stores solution
     int status = 0;
     int sockfd;
     struct sockaddr_in servaddr;
@@ -35,14 +38,25 @@ int main() {
 	}
 
     //create sudoku
-    board puzzle;
     board_create(puzzle);
-
-    //serialize
+    fprintf(stdout, "Created sudoku:\n");
+    board_print(puzzle);
 
     //send sudoku
+    if ((send(sockfd, &puzzle, 81, 0)) < 0) {
+        fprintf(stderr, "Error: failed to send sudoku\n");
+        close(sockfd);
+        return ++status;
+    }
 
     //receive answer
+    if ((recv(sockfd, &buf, 81, 0)) < 0) {
+        fprintf(stderr, "Error: failed to recieve solution\n");
+        close(sockfd);
+        return ++status;
+    }
+    fprintf(stdout, "Recieved solution!\n");
+    board_print(buf);
 
     //close socket
     fprintf(stdout, "Exiting...\n");
