@@ -21,11 +21,11 @@ The unit tests for solve work by attempting to solve pre-defined puzzles – 3 v
 
 #### board
 
-The unit tests in this file test each of the functions accessible via the `board` module. Each unit test in this file tests one function – `board_valid`, `board_get`, `board_new`, etc. – and verifies that the expected change is reflected in the board.
+The unit tests in this file test each of the functions accessible via the `board` module. Each unit test in this file tests one function – `board_valid`, `board_get`, `board_new`, etc. – and verifies that the expected change is reflected in the board. Note that these test cases may require hitting the enter key on the keyboard a few times to emulate the behavior of `board_scan`.
 
 #### utilities
 
-These unit tests ensure that the functions in the `utilities` module work as intended. Note that there is a very small chance that the `shuffle` unit tests fail if the shuffler by chance leaves the first two values in the array unchanged (that is, it randomly shuffles them back to their original spots). 
+These unit tests ensure that the functions in the `utilities` module work as intended. Note that there is a very small chance that the `shuffle` unit tests fail if the shuffler by chance leaves the first two values in the array unchanged (that is, it randomly shuffles them back to their original spots). Note that these test cases may take a while to run due to the calls to the `backtrack` function. 
 
 ### Fuzz testing
 

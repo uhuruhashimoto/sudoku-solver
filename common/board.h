@@ -56,7 +56,7 @@ void board_print(board board);
  * separated by a single space. 
  * 
  */
-void board_scan(board board, FILE* fp);
+bool board_scan(board board, FILE* fp);
 
 
 /**************** board_get ****************/

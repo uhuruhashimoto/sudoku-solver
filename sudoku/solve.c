@@ -14,13 +14,16 @@ const int NO_SOLUTION = 1;
 // solve - scans, solves, and prints board
 void solve(board puzzle) 
 {
+	bool valid = true;
 	// if not doing unit tests, need to get 
 	// board from stdin 
 	#ifndef UNIT_TEST_SOLVE
 		#ifndef UNIT_TEST_FUZZ
-			board_scan(puzzle, stdin); 
+			valid = board_scan(puzzle, stdin); 
 		#endif
 	#endif
+
+	if (!valid) return;
 
 	editable_spots_t spots = board_editable_spots(puzzle);
 	int num_sol = 0;
@@ -36,6 +39,7 @@ void solve(board puzzle)
 	// now board should be in solved state
 	fprintf(stdout, "Solved board:\n");
 	board_print(puzzle);
+	printf("\n");
 }
 
 /** Unit tests **/

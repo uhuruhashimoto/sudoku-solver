@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 #include "solve.h"
 #include "create.h"
 #include "../common/board.h"
@@ -23,6 +24,7 @@ int validate_arguments(const int argc, const char *argv[]);
 
 int main(const int argc, const char *argv[])
 {
+    srand ( time(NULL) );
     int validated = validate_arguments(argc, argv);
     if (validated != 0) {
         exit(validated);

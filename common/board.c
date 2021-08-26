@@ -48,7 +48,7 @@ void board_print(board board)
         for(int j = 0; j < 9; j++){
             fprintf(stdout, "%d ", board[i][j]);
         }
-        fprintf(stdout, "\n");
+        if (i < 8) fprintf(stdout, "\n");
     }
 }
 
@@ -59,7 +59,7 @@ int board_get(board board, int row, int column)
 }
 
 // /**************** board_scan ****************/
-void board_scan(board board, FILE* fp)
+bool board_scan(board board, FILE* fp)
 {
     int i = 0;
     char* row;
@@ -69,13 +69,16 @@ void board_scan(board board, FILE* fp)
         if(strlen(row) != 18) {
             free(row);
             fprintf(stderr, "not a valid board\n");
-            return;
+            return false;
         }
 
-        if((strcmp(row, "%d %d %d %d %d %d %d %d %d ") != 0)){
+        int row_arr[9];
+        if((sscanf(row, "%d %d %d %d %d %d %d %d %d ", 
+            &row_arr[0], &row_arr[1], &row_arr[2], &row_arr[3], &row_arr[4], &row_arr[5], &row_arr[6], &row_arr[7], &row_arr[8]) != 9)) {
+
             free(row);
             fprintf(stderr, "incorrect format of input. should have 9 numbers with spaces after each number.\n");
-            return;
+            return false;
         }
 
         else{
@@ -95,6 +98,7 @@ void board_scan(board board, FILE* fp)
             free(row);
         }
     }
+    return true;
 }
 
 /**************** board_editable_spots ****************/
