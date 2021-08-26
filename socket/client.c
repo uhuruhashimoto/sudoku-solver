@@ -6,7 +6,6 @@
 * Kumquat CS50 21X
 */
 
-//TODO: add a ifndef SOCKET flag to the makefile, so we don't scan from stdin
 
 #include <stdio.h>
 #include <stdlib.h>
