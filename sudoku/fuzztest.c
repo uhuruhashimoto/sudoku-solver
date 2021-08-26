@@ -55,7 +55,8 @@ int main(const int argc, const char *argv[]) {
 		printf("Board %d has %d solutions\n", i, num_solutions);
 
 		// check solved puzzle
-		solve(puzzle);
+		bool result = solve(puzzle);
+		EXPECT(result);
 		EXPECT(is_valid(puzzle));
 		EXPECT(is_complete(puzzle));
 		if (is_valid(puzzle) && is_complete(puzzle)) {
