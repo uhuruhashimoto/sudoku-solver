@@ -208,7 +208,7 @@ int test_backtrack(void)
   int num_solutions = 0;
   bool solved = backtrack(board, spots, 1, 0, &num_solutions);
   board_print(board);
-  printf("\n");
+  printf("\n\n");
 
   EXPECT(solved);
   EXPECT(num_solutions == 1);
@@ -222,7 +222,7 @@ int test_backtrack(void)
   num_solutions = 0;
   solved = backtrack(board, spots, 1, 0, &num_solutions);
   board_print(board);
-  printf("\n");
+  printf("\n\n");
 
   EXPECT(solved);
   EXPECT(num_solutions == 1);
@@ -236,7 +236,7 @@ int test_backtrack(void)
   num_solutions = 0;
   solved = backtrack(board, spots, 1, 0, &num_solutions);
   board_print(board);
-  printf("\n");
+  printf("\n\n");
 
   EXPECT(!solved);
   EXPECT(num_solutions == 0);

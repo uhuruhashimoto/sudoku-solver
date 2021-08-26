@@ -23,13 +23,14 @@
  * to stdout 
  * 
  * We return: 
- *  void, but the board if solvable is solved 
+ *  true if the board was solved, false if 
+ *  board was invalid or not solvable 
  * 
  * Caller is responsible for:
  *  calling board_initialize before passing board 
  *  
  */
-void solve(board board);
+bool solve(board board);
 
 
 #endif // __SOLVE_H

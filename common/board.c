@@ -287,7 +287,7 @@ int test_initialize_board(board board)
     EXPECT(board[2][4] == 0);
 
     END_TEST_CASE;
-    return 0;
+    return TEST_RESULT;
 }
 
 int test_print_board(board board)
@@ -297,47 +297,56 @@ int test_print_board(board board)
     board_print(board);
 
     END_TEST_CASE;
-    return 0;
+    return TEST_RESULT;
 }
 
 int test_scan_board(board board)
 {
     START_TEST_CASE("scan board");
+    printf("input board from keyboard: \n");
     board_scan(board, stdin);
 
     board_print(board);
     END_TEST_CASE;
-    return 0;
+    return TEST_RESULT;
 }
 
 int test_editable_spots(board board)
 {
     START_TEST_CASE("editable spots");
-    board_scan(board, stdin);
-
+    FILE *fp = fopen("solvable.txt", "r");
+    if (fp == NULL) {
+        return 1;
+    }
+    board_scan(board, fp);
 
     editable_spots_t editable_spots=board_editable_spots(board);
     for(int i=0; i<editable_spots.num_spots; i++){
         printf("%d, %d ", editable_spots.coords[i][0], editable_spots.coords[i][1]);
         
     }
+    EXPECT(editable_spots.coords[4][0] == 0);
     editable_spots_delete(editable_spots);
     END_TEST_CASE;
-    return 0;
+    return TEST_RESULT;
 }
 
 int test_board_get(board board) {
     START_TEST_CASE("board get");
-    printf("input board for board_get:\n");
-    board_scan(board, stdin);
 
+    FILE *fp = fopen("solvable.txt", "r");
+    if (fp == NULL) {
+        return 1;
+    }
+    board_scan(board, fp);
+
+    EXPECT(board_get(board, 6, 1) == 4);
     printf("%d\n", board_get(board, 6, 0));
     
     END_TEST_CASE;
-    return 0;
+    return TEST_RESULT;
 }
 
-// TODO: unit test with fixed coords to confirm validity 
 int test_board_valid(board board, char *filepath) {
     START_TEST_CASE("board valid");
     
@@ -353,7 +362,7 @@ int test_board_valid(board board, char *filepath) {
     fclose(fp);
     END_TEST_CASE;
     
-    return 0;
+    return TEST_RESULT;
 }
 
 int test_board_complete(board board, char *filepath) {

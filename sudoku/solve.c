@@ -12,7 +12,7 @@
 const int NO_SOLUTION = 1;
 
 // solve - scans, solves, and prints board
-void solve(board puzzle) 
+bool solve(board puzzle) 
 {
 	bool valid = true;
 	// if not doing unit tests, need to get 
@@ -23,15 +23,16 @@ void solve(board puzzle)
 		#endif
 	#endif
 
-	if (!valid) return;
+	if (!valid) return false;
 
 	editable_spots_t spots = board_editable_spots(puzzle);
 	int num_sol = 0;
 	
 	// solve the puzzle with backtrack 
 	if (!backtrack(puzzle, spots, (const int) 1, 0, &num_sol)) {
+		editable_spots_delete(spots);
 		fprintf(stderr, "Error: invalid or unsolveable board.\n");
-		exit(NO_SOLUTION);
+		return false;
 	}
   	// free memory
 	editable_spots_delete(spots);
@@ -40,6 +41,8 @@ void solve(board puzzle)
 	fprintf(stdout, "Solved board:\n");
 	board_print(puzzle);
 	printf("\n");
+
+	return true;
 }
 
 /** Unit tests **/
@@ -95,12 +98,14 @@ int test_invalid(board puzzle, char *filepath)
 	copy_board(copy, puzzle);
 	
 	fprintf(stdout, "Testing invalid board:\n");
-	solve(puzzle);
+	bool result = solve(puzzle);
 
+	EXPECT(!result);
 	//if backtrack is false, then board is returned in original state
 	EXPECT(compare_solutions(puzzle, copy));
 
 	fclose(fp);
+	END_TEST_CASE;
 	return TEST_RESULT;
 }
 
@@ -115,12 +120,14 @@ int test_unsolveable(board puzzle, char *filepath)
 	copy_board(copy, puzzle);
 	
 	fprintf(stdout, "Testing unsolveable board:\n");
-	solve(puzzle);
+	bool result = solve(puzzle);
 
+	EXPECT(!result);
 	//if backtrack is false, then board is returned in original state
 	EXPECT(compare_solutions(puzzle, copy));
 
 	fclose(fp);
+	END_TEST_CASE;
 	return TEST_RESULT;
 }
 
@@ -130,7 +137,7 @@ int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
 	FILE *fp = fopen(filepath, "r");
 	FILE *solfp = fopen(solutionpath, "r");
 	if (fp == NULL || solfp == NULL) {
-			return 1;
+		return 1;
 	}
 	board_scan(puzzle, fp);
 	board_scan(solution, solfp);
@@ -148,6 +155,7 @@ int test_solve(board puzzle, board solution, char *filepath, char *solutionpath)
 
 	fclose(fp);
 	fclose(solfp);
+	END_TEST_CASE;
 	return TEST_RESULT;
 }
 

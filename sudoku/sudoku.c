@@ -19,6 +19,7 @@
 
 const int ERROR_NUM_ARGS = 1;
 const int ERROR_ARG = 2;
+const int NO_SOL = 3;
 
 int validate_arguments(const int argc, const char *argv[]);
 
@@ -35,7 +36,9 @@ int main(const int argc, const char *argv[])
     board_initialize(board);
 
     if (strcmp(argv[1], "solve") == 0) {
-        solve(board);
+        if (!solve(board)) {
+            exit(NO_SOL);
+        }
     }
     else {
         create(board);
