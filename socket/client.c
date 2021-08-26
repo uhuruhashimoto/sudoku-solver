@@ -20,42 +20,49 @@
 
 
 int main() {
-    const int PORT = 60065;
+    const int PORT = 3000;
     board puzzle; //stores created sudoku
     board buf; //stores solution
     int status = 0;
     int sockfd;
     struct sockaddr_in servaddr;
 
+    board_initialize(puzzle);
+    board_initialize(buf);
+
     //create socket
+    fprintf(stdout, "Creating socket...\n");
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        fprintf(stderr, "Error: failed to create socket\n");
+        perror("Failed to create socket");
         return ++status;
     }
     servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	servaddr.sin_port = htons(PORT);
 
+    //connecting to socket
+    fprintf(stdout, "Connecting to socket at port %d...\n", PORT);
     if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
-		fprintf(stderr, "Error: failed to connect to socket\n");
+		perror("Failed to connect to socket");
         return ++status;
 	}
+    fprintf(stdout, "Connected.\n");
 
     //create sudoku
-    create(puzzle);
     fprintf(stdout, "Created sudoku:\n");
-    board_print(puzzle);
+    create(puzzle);
 
     //send sudoku
-    if ((send(sockfd, puzzle, 81, 0)) < 0) {
-        fprintf(stderr, "Error: failed to send sudoku\n");
+    fprintf(stdout, "Sending sudoku...\n");
+    if ((send(sockfd, puzzle, 81*4, 0)) < 0) {
+        perror("Failed to send sudoku");
         close(sockfd);
         return ++status;
     }
 
     //receive answer
     if ((read(sockfd, &buf, 81)) < 0) {
-        fprintf(stderr, "Error: failed to recieve solution\n");
+        perror("Failed to recieve solution");
         close(sockfd);
         return ++status;
     }
