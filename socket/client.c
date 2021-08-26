@@ -6,6 +6,8 @@
 * Kumquat CS50 21X
 */
 
+//TODO: add a ifndef SOCKET flag to the makefile, so we don't scan from stdin
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h> //for closing files
@@ -20,7 +22,7 @@
 
 
 int main() {
-    const int PORT = 3000;
+    const int PORT = 3001;
     board puzzle; //stores created sudoku
     board buf; //stores solution
     int status = 0;
@@ -61,7 +63,7 @@ int main() {
     }
 
     //receive answer
-    if ((read(sockfd, &buf, 81)) < 0) {
+    if ((recv(sockfd, &buf, 81*4, 0)) < 0) {
         perror("Failed to recieve solution");
         close(sockfd);
         return ++status;

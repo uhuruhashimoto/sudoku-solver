@@ -19,7 +19,7 @@
 
 
 int main() {
-    const int PORT = 3000;
+    const int PORT = 3001;
     int status = 0;
     int sockfd;
     int clientfd;
@@ -74,12 +74,10 @@ int main() {
     //solve sudoku
     fprintf(stdout, "Solving sudoku...\n");
     solve(buf);
-    fprintf(stdout, "Solution:\n");
-    board_print(buf);
 
     //send solution
     fprintf(stdout, "Sending solution...\n");
-    if ((send(sockfd, buf, 81, 0)) < 0) {
+    if ((send(clientfd, buf, 81*4, 0)) < 0) {
         perror("Failed to send solution");
         close(sockfd);
         return ++status;

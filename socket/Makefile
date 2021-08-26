@@ -8,7 +8,8 @@
 OBJ_CLIENT = client.o 
 OBJ_SERVER = server.o 
 CC = gcc
-CFLAGS = -Wall -pedantic -std=c11 -ggdb
+FLAGS = -DSOCKET
+CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS)
 
 all: client server 
 

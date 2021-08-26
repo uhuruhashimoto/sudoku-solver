@@ -19,7 +19,9 @@ void solve(board puzzle)
 	// board from stdin 
 	#ifndef UNIT_TEST_SOLVE
 		#ifndef UNIT_TEST_FUZZ
+			#ifndef SOCKET
 			valid = board_scan(puzzle, stdin); 
+			#endif
 		#endif
 	#endif
 
